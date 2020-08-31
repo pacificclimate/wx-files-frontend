@@ -1,9 +1,8 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import map from 'lodash/fp/map';
 import locations from '../../../assets/locations';
-import { useTable } from 'react-table';
+import { useTable, useSortBy } from 'react-table';
 
 
 export default function AppBody() {
@@ -27,7 +26,7 @@ export default function AppBody() {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data });
+  } = useTable({ columns, data }, useSortBy);
 
   return (
     <Row>
@@ -38,7 +37,7 @@ export default function AppBody() {
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <th
-                  {...column.getHeaderProps()}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
                   style={{
                     borderBottom: 'solid 3px red',
                     background: 'aliceblue',
@@ -47,6 +46,13 @@ export default function AppBody() {
                   }}
                 >
                   {column.render('Header')}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : ''}
+                  </span>
                 </th>
               ))}
             </tr>
