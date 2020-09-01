@@ -158,13 +158,18 @@ export default function AppBody() {
         accessor: "code",
       },
       {
-        Header: "Latitude",
-        accessor: "latitude",
+        Header: "Coordinates",
+        id: "coordinates",
+        accessor: (row, index) => `${row["latitude"]}°N, ${-row["longitude"]}°W`,
       },
-      {
-        Header: "Longitude",
-        accessor: "longitude",
-      },
+      // {
+      //   Header: "Latitude",
+      //   accessor: "latitude",
+      // },
+      // {
+      //   Header: "Longitude",
+      //   accessor: "longitude",
+      // },
       {
         Header: "Elevation",
         accessor: "elevation",
