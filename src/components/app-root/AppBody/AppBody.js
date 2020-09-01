@@ -5,6 +5,9 @@ import locations from '../../../assets/locations';
 import { useTable, useSortBy, useFilters } from 'react-table';
 
 
+// Custom filter UIs
+
+// Default UI for column filtering
 function DefaultColumnFilter({
   column: { filterValue, preFilteredRows, setFilter },
 }) {
@@ -21,10 +24,65 @@ function DefaultColumnFilter({
   );
 }
 
+// Custom filter UI for selecting a unique option from a list
+function SelectColumnFilter({
+  column: { filterValue, setFilter, preFilteredRows, id },
+}) {
+  // Calculate the options for filtering using the preFilteredRows
+  const options = React.useMemo(() => {
+    const options = new Set()
+    preFilteredRows.forEach(row => {
+      options.add(row.values[id])
+    })
+    return [...options.values()]
+  }, [id, preFilteredRows])
+
+  // Render a multi-select box
+  return (
+    <select
+      value={filterValue}
+      onChange={e => {
+        setFilter(e.target.value || undefined)
+      }}
+    >
+      <option value="">All</option>
+      {options.map((option, i) => (
+        <option key={i} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  )
+}
+
+
+// Custom filters
+
+function textStartsWith(rows, id, filterValue) {
+  return rows.filter(row => {
+    const rowValue = row.values[id];
+    return rowValue !== undefined
+      ? String(rowValue)
+        .toLowerCase()
+        .startsWith(String(filterValue).toLowerCase())
+      : true
+  });
+}
+
+textStartsWith.autoRemove = val => !val;
+
+
 
 
 export default function AppBody() {
   const data = React.useMemo(() => locations, []);
+
+  const filterTypes = React.useMemo(
+    () => ({
+      textStartsWith,
+    }),
+    []
+  );
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -36,12 +94,33 @@ export default function AppBody() {
 
   const columns = React.useMemo(
     () => [
-      { Header: "City", accessor: "city", filter: 'text' },
-      { Header: "Province", accessor: "province" },
-      { Header: "Code", accessor: "code" },
-      { Header: "Latitude", accessor: "latitude" },
-      { Header: "Longitude", accessor: "longitude" },
-      { Header: "Elevation", accessor: "elevation" },
+      {
+        Header: "City",
+        accessor: "city",
+        filter: 'textStartsWith',
+      },
+      {
+        Header: "Province",
+        accessor: "province",
+        Filter: SelectColumnFilter,
+        filter: 'includes',
+      },
+      {
+        Header: "Code",
+        accessor: "code",
+      },
+      {
+        Header: "Latitude",
+        accessor: "latitude",
+      },
+      {
+        Header: "Longitude",
+        accessor: "longitude",
+      },
+      {
+        Header: "Elevation",
+        accessor: "elevation",
+      },
     ],
     []
   );
@@ -53,7 +132,7 @@ export default function AppBody() {
     rows,
     prepareRow,
   } = useTable(
-    { columns, data, defaultColumn },
+    { columns, data, defaultColumn, filterTypes, },
     useFilters,
     useSortBy,
   );
