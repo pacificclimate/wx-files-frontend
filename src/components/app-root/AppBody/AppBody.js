@@ -143,18 +143,18 @@ export default function AppBody() {
         <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
           <thead>
           {headerGroups.map(headerGroup => (
+            <>
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   style={{
-                    borderBottom: 'solid 3px red',
                     background: 'aliceblue',
                     color: 'black',
                     fontWeight: 'bold',
                   }}
                 >
-                  {column.render('Header' )}
+                  {column.render('Header')}
                   <span>
                     {column.isSorted
                       ? column.isSortedDesc
@@ -162,10 +162,25 @@ export default function AppBody() {
                         : ' 🔼'
                       : ''}
                   </span>
+                </th>
+              ))}
+            </tr>
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th
+                  {...column.getHeaderProps()}
+                  style={{
+                    borderBottom: 'solid 3px red',
+                    background: 'aliceblue',
+                    color: 'black',
+                    fontWeight: 'bold',
+                  }}
+                >
                   <div>{column.canFilter ? column.render('Filter') : null}</div>
                 </th>
               ))}
             </tr>
+            </>
           ))}
           </thead>
           <tbody {...getTableBodyProps()}>
