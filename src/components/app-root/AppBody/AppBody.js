@@ -55,6 +55,7 @@ function SelectColumnFilter({
   )
 }
 
+// Custom filter UI for selecting number within a range (min, max).
 function NumberRangeColumnFilter({
  column: { filterValue = [], preFilteredRows, setFilter, id },
 }) {
@@ -105,6 +106,62 @@ function NumberRangeColumnFilter({
   )
 }
 
+// Custom UI for selecting a coordinates (lat, lon pair) near given coordinates.
+function CoordinatesNearColumnFilter({
+ column: { filterValue = [], preFilteredRows, setFilter, id },
+}) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+      }}
+    >
+      <input
+        value={filterValue[0] || ''}
+        type="number"
+        onChange={e => {
+          const val = e.target.value
+          setFilter((old = []) => [val ? parseFloat(val) : undefined, old[1], old[2]])
+        }}
+        placeholder={`Lat (°N)`}
+        style={{
+          width: '70px',
+          marginRight: '0.5rem',
+        }}
+      />
+      {', '}
+      <input
+        value={filterValue[1] || ''}
+        type="number"
+        onChange={e => {
+          const val = e.target.value
+          setFilter((old = []) => [old[0], val ? parseFloat(val) : undefined, old[2]])
+        }}
+        placeholder={`Lon (°W)`}
+        style={{
+          width: '70px',
+          marginLeft: '0.5rem',
+        }}
+      />
+      +/-
+      <input
+        value={filterValue[2] || ''}
+        type="number"
+        onChange={e => {
+          const val = e.target.value
+          setFilter((old = []) => [old[0], old[1], val ? parseFloat(val) : undefined])
+        }}
+        placeholder={`km`}
+        style={{
+          width: '70px',
+          marginLeft: '0.5rem',
+        }}
+      />
+      km
+    </div>
+  )
+}
+
 // Custom filters
 
 function textStartsWith(rows, id, filterValue) {
@@ -117,26 +174,67 @@ function textStartsWith(rows, id, filterValue) {
       : true
   });
 }
-
 textStartsWith.autoRemove = val => !val;
+
+function coordinatesInBox(rows, id, filterValue) {
+  const [latFilter, lonFilter, distance] = filterValue;
+
+  const bounds = (center, tolerance) =>
+    [center - tolerance, center + tolerance];
+
+  const inBounds = (value, [min, max]) => value >= min && value <= max;
+
+  // approx km / deg lat at Canadian latitudes
+  // (varies by < 1% from equator to pole, according to ellipsoid)
+  const latTolerance = distance / 111.2;
+  const latBounds = bounds(latFilter, latTolerance);
+
+  // approx km / deg lon at specified latitude; if latitude unspecified, use
+  // a default value of 55.
+  const lonTolerance =
+    distance / (111.32 * Math.cos((latFilter || 55.0) / 180 * Math.PI));
+  const lonBounds = bounds(lonFilter, lonTolerance);
+
+  const result = rows.filter(row => {
+    const [latitude, longitude] = row.values[id];
+    const pred = (
+      (!latFilter || inBounds(latitude, latBounds)) &&
+      (!lonFilter || inBounds(longitude, lonBounds))
+    );
+    console.log("### lat, lon, pred", latitude, longitude, pred)
+    return pred;
+  });
+  console.groupEnd()
+  return result;
+}
+coordinatesInBox.autoRemove = val =>
+  !val || (typeof val[0] !== 'number' && typeof val[1] !== 'number' &&
+  typeof val[2] !== 'number');
 
 
 
 
 export default function AppBody() {
-  const data = React.useMemo(() => locations, []);
+  const data = React.useMemo(
+    () => locations.map(({ latitude, longitude, ...rest }) => ({
+      coordinates: [latitude, longitude],
+      ...rest,
+    })),
+    []
+  );
 
   const filterTypes = React.useMemo(
     () => ({
       textStartsWith,
+      coordinatesInBox,
     }),
     []
   );
 
   const defaultColumn = React.useMemo(
     () => ({
-      // Let's set up our default Filter UI
       Filter: DefaultColumnFilter,
+      filter: "textStartsWith",
     }),
     []
   );
@@ -159,8 +257,10 @@ export default function AppBody() {
       },
       {
         Header: "Coordinates",
-        id: "coordinates",
-        accessor: (row, index) => `${row["latitude"]}°N, ${-row["longitude"]}°W`,
+        // id: "coordinates",
+        accessor: "coordinates",
+        Filter: CoordinatesNearColumnFilter,
+        filter: "coordinatesInBox",
       },
       // {
       //   Header: "Latitude",
