@@ -158,6 +158,7 @@ function CoordinatesNearColumnFilter({
         }}
       />
       km
+      <button onClick={() => setFilter(undefined)}>Clear</button>
     </div>
   )
 }
@@ -288,14 +289,6 @@ export default function AppBody() {
         Filter: CoordinatesNearColumnFilter,
         filter: "coordinatesWithinRadius",
       },
-      // {
-      //   Header: "Latitude",
-      //   accessor: "latitude",
-      // },
-      // {
-      //   Header: "Longitude",
-      //   accessor: "longitude",
-      // },
       {
         Header: "Elevation",
         accessor: "elevation",
@@ -312,11 +305,16 @@ export default function AppBody() {
     headerGroups,
     rows,
     prepareRow,
+    setFilter,
   } = useTable(
     { columns, data, defaultColumn, filterTypes, },
     useFilters,
     useSortBy,
   );
+
+  const makeHandleClickRow = row => () => {
+    setFilter("coordinates", [...row.values.coordinates, 100]);
+  }
 
   return (
     <Row>
@@ -368,7 +366,7 @@ export default function AppBody() {
           {rows.map(row => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()}>
+              <tr {...row.getRowProps()} onClick={makeHandleClickRow(row)}>
                 {row.cells.map(cell => {
                   return (
                     <td
