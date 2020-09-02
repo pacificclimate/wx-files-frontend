@@ -284,8 +284,8 @@ export default function AppBody() {
       },
       {
         Header: "Coordinates",
-        // id: "coordinates",
         accessor: "coordinates",
+        Cell: ({ value: [lat, lon] }) => `${lat}°N, ${lon}°W`,
         Filter: CoordinatesNearColumnFilter,
         filter: "coordinatesWithinRadius",
       },
