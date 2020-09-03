@@ -23,6 +23,15 @@ export default function AppBody() {
   const columns = React.useMemo(
     () => [
       {
+        Header: false,
+        id: "expander",
+        Cell: ({ row }) => (
+          <span {...row.getToggleRowExpandedProps()}>
+            {row.isExpanded ? '👇' : '👉'}
+          </span>
+        ),
+      },
+      {
         Header: "City",
         accessor: "city",
       },
@@ -53,12 +62,24 @@ export default function AppBody() {
     []
   );
 
+  const renderFiles = React.useCallback(
+    ({ row, visibleColumns }) => (
+      <tr>
+        <td></td>
+        <td colSpan={visibleColumns.length-1}>
+          'Files'
+        </td>
+      </tr>
+    )
+  )
+
   return (
     <Row>
       <Col lg={12}>
         <DataGrid
           columns={columns}
           data={data}
+          renderRowExpansion={renderFiles}
         />
       </Col>
     </Row>

@@ -5,7 +5,7 @@ import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith
 } from '../column-filters/filterTypes';
 import DefaultColumnFilter from '../column-filters/DefaultColumnFilter';
-import { useFilters, useSortBy, useTable } from 'react-table';
+import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
 
 
 export function DataGrid({ columns, data, renderRowExpansion}) {
@@ -33,10 +33,12 @@ export function DataGrid({ columns, data, renderRowExpansion}) {
     rows,
     prepareRow,
     setFilter,
+    visibleColumns,
   } = useTable(
     { columns, data, defaultColumn, filterTypes, },
     useFilters,
     useSortBy,
+    useExpanded,
   );
 
   const makeHandleClickRow = row => () => {
@@ -91,22 +93,25 @@ export function DataGrid({ columns, data, renderRowExpansion}) {
       {rows.map(row => {
         prepareRow(row)
         return (
-          <tr {...row.getRowProps()} onClick={makeHandleClickRow(row)}>
-            {row.cells.map(cell => {
-              return (
-                <td
-                  {...cell.getCellProps()}
-                  style={{
-                    padding: '10px',
-                    border: 'solid 1px gray',
-                    background: 'papayawhip',
-                  }}
-                >
-                  {cell.render('Cell')}
-                </td>
-              )
-            })}
-          </tr>
+          <React.Fragment {...row.getRowProps()} >
+            <tr onClick={makeHandleClickRow(row)}>
+              {row.cells.map(cell => {
+                return (
+                  <td
+                    {...cell.getCellProps()}
+                    style={{
+                      padding: '10px',
+                      border: 'solid 1px gray',
+                      background: 'papayawhip',
+                    }}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                )
+              })}
+            </tr>
+            {row.isExpanded ? renderRowExpansion({ row, visibleColumns }) : null}
+          </React.Fragment>
         )
       })}
       </tbody>
