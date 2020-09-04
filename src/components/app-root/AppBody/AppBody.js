@@ -10,6 +10,11 @@ import CoordinatesNearColumnFilter
 import NumberRangeColumnFilter
   from '../../data-grid/column-filters/NumberRangeColumnFilter';
 
+// TODO: div-based rendering (not table)
+// TODO: Styling
+// TODO: Fix bad factorization of DataGrid and AppBody
+// TODO: Add files metadata columns, e.g., scenarios, time periods, with filters
+// TODO: Implement expander for files as a react-table component
 
 export default function AppBody() {
   const data = React.useMemo(
