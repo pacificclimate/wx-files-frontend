@@ -9,14 +9,17 @@ function makeFileCommon() {
   }
 }
 
-function makeWxFile(timePeriod) {
+function makeWxFile(tStart, tEnd) {
   return {
     ...makeFileCommon(),
     fileType: "weather",
     dataSource: "CWEC2016",
     designDataType: "TMY",
     scenario: "RCP8.5",
-    timePeriod,
+    timePeriod: {
+      start: new Date(tStart),
+      end: new Date(tEnd),
+    },
     ensembleStatistic: "median",
     variables: "all thermodynamic",
     anomaly: "daily",
@@ -50,9 +53,9 @@ function makeLocation(
     longitude,
     elevation,
     files: [
-      makeWxFile({ start: "2010-01-01", end: "2039-12-31" }),
-      makeWxFile({ start: "2040-01-01", end: "2069-12-31" }),
-      makeWxFile({ start: "2070-01-01", end: "2099-12-31" }),
+      makeWxFile("2010-01-01", "2039-12-31"),
+      makeWxFile("2040-01-01", "2069-12-31"),
+      makeWxFile("2070-01-01", "2099-12-31"),
       makeSummaryFile(),
     ],
   }

@@ -1,6 +1,12 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import flow from 'lodash/fp/flow';
+import map from 'lodash/fp/map';
+import compact from 'lodash/fp/compact';
+import join from 'lodash/fp/join';
+import uniq from 'lodash/fp/uniq';
+
 import locations from '../../../assets/locations';
 import { DataGrid } from '../../data-grid/DataGrid';
 import SelectColumnFilter
@@ -13,15 +19,39 @@ import NumberRangeColumnFilter
 // TODO: div-based rendering (not table)
 // TODO: Styling
 // TODO: Fix bad factorization of DataGrid and AppBody
-// TODO: Add files metadata columns, e.g., scenarios, time periods, with filters
 // TODO: Implement expander for files as a react-table component
 
 export default function AppBody() {
   const data = React.useMemo(
-    () => locations.map(({ latitude, longitude, ...rest }) => ({
-      coordinates: [latitude, longitude],
-      ...rest,
-    })),
+    () => locations.map(
+      location => {
+        const { latitude, longitude, files } = location;
+        return ({
+          ...location,
+
+          coordinates: [latitude, longitude],
+
+          timePeriods: flow(
+            map(({ timePeriod }) => {
+              if (!timePeriod) {
+                return null;
+              }
+              const startYear = timePeriod.start.getFullYear();
+              const endYear = timePeriod.end.getFullYear();
+              return Math.floor((startYear + endYear) / 20) * 10;
+            }),
+            compact,
+            uniq,
+          )(files),
+
+          scenarios: flow(
+            map('scenario'),
+            compact,
+            uniq,
+          )(files),
+        })
+      }
+    ),
     []
   );
 
@@ -63,6 +93,24 @@ export default function AppBody() {
         Filter: NumberRangeColumnFilter,
         filter: 'between',
       },
+      {
+        Header: "Time Periods",
+        accessor: "timePeriods",
+        Cell: ({ value }) => {
+          console.log('### timePeriods column', value)
+          return flow(
+            map(t => `${t}s`),
+            join(', '),
+          )(value);
+        },
+        filter: 'text',
+      },
+      {
+        Header: "Scenarios",
+        accessor: "scenarios",
+        Cell: ({ value }) => value.join(', '),
+        filter: "text",
+      },
     ],
     []
   );
@@ -70,7 +118,7 @@ export default function AppBody() {
   const renderFiles = React.useCallback(
     ({ row, visibleColumns }) => (
       <tr>
-        <td></td>
+        <td>&nbsp;</td>
         <td colSpan={visibleColumns.length-1}>
           'Files'
         </td>
