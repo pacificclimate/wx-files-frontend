@@ -45,6 +45,17 @@ export function DataGrid({ columns, data, renderRowExpansion}) {
     setFilter("coordinates", [...row.values.coordinates, 100]);
   }
 
+  const makeHandleClickCell = cell => () => {
+    switch(cell.column.id) {
+      case "coordinates":
+        setFilter("coordinates", [...cell.row.values.coordinates, 100]);
+        break;
+      default:
+        break;
+    }
+    // console.log('### makeHandleClickCell', cell);
+  }
+
   return (
     <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
       <thead>
@@ -94,7 +105,7 @@ export function DataGrid({ columns, data, renderRowExpansion}) {
         prepareRow(row)
         return (
           <React.Fragment {...row.getRowProps()} >
-            <tr onClick={makeHandleClickRow(row)}>
+            <tr>
               {row.cells.map(cell => {
                 return (
                   <td
@@ -104,6 +115,7 @@ export function DataGrid({ columns, data, renderRowExpansion}) {
                       border: 'solid 1px gray',
                       background: 'papayawhip',
                     }}
+                    onClick={makeHandleClickCell(cell)}
                   >
                     {cell.render('Cell')}
                   </td>

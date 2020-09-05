@@ -83,7 +83,7 @@ export default function AppBody() {
       {
         Header: "Coordinates",
         accessor: "coordinates",
-        Cell: ({ value: [lat, lon] }) => `${lat}°N, ${lon}°W`,
+        Cell: ({ value: [lat, lon] }) => `☝ ${lat}°N, ${lon}°W`,
         Filter: CoordinatesNearColumnFilter,
         filter: "coordinatesWithinRadius",
       },
