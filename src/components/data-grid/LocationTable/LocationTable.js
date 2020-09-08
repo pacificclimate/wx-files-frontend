@@ -4,10 +4,10 @@ import {
 } from '../column-filters/filterTypes';
 import DefaultColumnFilter from '../column-filters/DefaultColumnFilter';
 import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
-import styles from './DataGrid.module.css';
+import styles from './LocationTable.module.css';
 
 
-export function DataGrid({ columns, data, renderRowExpansion}) {
+export default function LocationTable({ columns, data, renderRowExpansion}) {
   const filterTypes = React.useMemo(
     () => ({
       textStartsWith,
@@ -40,6 +40,8 @@ export function DataGrid({ columns, data, renderRowExpansion}) {
     useExpanded,
   );
 
+  // TODO: For coordinates, at least, this could be a click handler on the
+  // icon.
   const makeHandleClickCell = cell => () => {
     switch(cell.column.id) {
       case "coordinates":
@@ -52,7 +54,7 @@ export function DataGrid({ columns, data, renderRowExpansion}) {
   }
 
   return (
-    <div className={styles.DataGrid}>
+    <div className={styles.LocationTable}>
       <table
         {...getTableProps()}
       >
@@ -87,6 +89,7 @@ export function DataGrid({ columns, data, renderRowExpansion}) {
         </thead>
         <tbody {...getTableBodyProps()}>
         {rows.map(row => {
+          console.log("### location row", row)
           prepareRow(row)
           return (
             <React.Fragment {...row.getRowProps()} >

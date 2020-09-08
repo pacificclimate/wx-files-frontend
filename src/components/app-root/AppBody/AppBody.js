@@ -8,7 +8,7 @@ import join from 'lodash/fp/join';
 import uniq from 'lodash/fp/uniq';
 
 import locations from '../../../assets/locations';
-import { DataGrid } from '../../data-grid/DataGrid';
+import LocationTable from '../../data-grid/LocationTable';
 import SelectColumnFilter
   from '../../data-grid/column-filters/SelectColumnFilter';
 import CoordinatesNearColumnFilter
@@ -17,8 +17,7 @@ import NumberRangeColumnFilter
   from '../../data-grid/column-filters/NumberRangeColumnFilter';
 
 // TODO: div-based rendering (not table)
-// TODO: Styling
-// TODO: Fix bad factorization of DataGrid and AppBody
+// TODO: Fix bad factorization of LocationTable and AppBody
 // TODO: Implement expander for files as a react-table component
 
 export default function AppBody() {
@@ -129,7 +128,7 @@ export default function AppBody() {
   return (
     <Row>
       <Col lg={12}>
-        <DataGrid
+        <LocationTable
           columns={columns}
           data={data}
           renderRowExpansion={renderFiles}
