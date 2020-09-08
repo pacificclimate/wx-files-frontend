@@ -6,6 +6,7 @@ import map from 'lodash/fp/map';
 import compact from 'lodash/fp/compact';
 import join from 'lodash/fp/join';
 import uniq from 'lodash/fp/uniq';
+import capitalize from 'lodash/fp/capitalize';
 
 import locations from '../../../assets/locations';
 import LocationTable from '../../data-grid/LocationTable';
@@ -19,12 +20,21 @@ import FileTable from '../../data-grid/FileTable';
 
 import styles from '../../data-grid/LocationTable/LocationTable.module.css';
 
-// TODO: div-based rendering (not table)
 // TODO: Fix bad factorization of LocationTable and AppBody
-// TODO: Implement expander for files as a react-table component
+// TODO: Add expand-all
+
+
+const middleDecade = timePeriod => {
+  if (!timePeriod) {
+    return null;
+  }
+  const startYear = timePeriod.start.getFullYear();
+  const endYear = timePeriod.end.getFullYear();
+  return Math.floor((startYear + endYear) / 20) * 10;
+}
 
 export default function AppBody() {
-  const locationData = React.useMemo(
+  const locationsData = React.useMemo(
     () => locations.map(
       location => {
         const { latitude, longitude, files } = location;
@@ -33,15 +43,8 @@ export default function AppBody() {
 
           coordinates: [latitude, longitude],
 
-          timePeriods: flow(
-            map(({ timePeriod }) => {
-              if (!timePeriod) {
-                return null;
-              }
-              const startYear = timePeriod.start.getFullYear();
-              const endYear = timePeriod.end.getFullYear();
-              return Math.floor((startYear + endYear) / 20) * 10;
-            }),
+          timePeriodDecades: flow(
+            map(({ timePeriod }) => middleDecade(timePeriod)),
             compact,
             uniq,
           )(files),
@@ -50,6 +53,23 @@ export default function AppBody() {
             map('scenario'),
             compact,
             uniq,
+          )(files),
+
+          filesData: map(
+            file => {
+              const {
+                fileType, scenario, timePeriod, ensembleStatistic, variables
+              } = file;
+              return {
+                ...file,
+                fileType: capitalize(fileType),
+                scenario: scenario || '???',
+                timePeriodDecade:
+                  timePeriod ? `${middleDecade(timePeriod)}s` : "???",
+                ensembleStatistic: ensembleStatistic || "???",
+                variables: variables || "???",
+              }
+            }
           )(files),
         })
       }
@@ -97,9 +117,9 @@ export default function AppBody() {
       },
       {
         Header: "Time Periods",
-        accessor: "timePeriods",
+        accessor: "timePeriodDecades",
         Cell: ({ value }) => {
-          console.log('### timePeriods column', value)
+          console.log('### timePeriodDecades column', value)
           return flow(
             map(t => `${t}s`),
             join(', '),
@@ -122,7 +142,6 @@ export default function AppBody() {
       {
         Header: "Type",
         accessor: "fileType",
-        Cell: ({ value }) => value === 'weather' ? 'Wx' : 'Summ',
         Filter: SelectColumnFilter,
         filter: 'includes',
       },
@@ -134,13 +153,9 @@ export default function AppBody() {
       },
       {
         Header: "Time Period",
-        accessor: "timePeriod",
-        Cell: ({ value }) => {
-          console.log("### file cell timePeriod", value)
-          return value ?
-            `${value.start.getUTCFullYear()} - ${value.end.getUTCFullYear()}` :
-            'all';
-        },
+        accessor: "timePeriodDecade",
+        Filter: SelectColumnFilter,
+        filter: 'includesIfDefined',
       },
       {
         Header: "Ensemble Statistic",
@@ -169,7 +184,7 @@ export default function AppBody() {
       <tr className={styles.expander}>
         <td>&nbsp;</td>
         <td colSpan={visibleColumns.length-1}>
-          <FileTable columns={fileColumns} data={row.original.files}/>
+          <FileTable columns={fileColumns} data={row.original.filesData}/>
         </td>
       </tr>
     )
@@ -180,7 +195,7 @@ export default function AppBody() {
       <Col lg={12}>
         <LocationTable
           columns={locationColumns}
-          data={locationData}
+          data={locationsData}
           renderRowExpansion={renderFiles}
         />
       </Col>
