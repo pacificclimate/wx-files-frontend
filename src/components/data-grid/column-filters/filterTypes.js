@@ -12,6 +12,18 @@ export function textStartsWith(rows, id, filterValue) {
 }
 textStartsWith.autoRemove = val => !val;
 
+// A more forgiving 'includes' filter.
+
+export const includesIfDefined = (rows, ids, filterValue) => {
+  return rows.filter(row => {
+    return ids.some(id => {
+      const rowValue = row.values[id]
+      return rowValue && rowValue.includes(filterValue)
+    })
+  })
+}
+includesIfDefined.autoRemove = val => !val || !val.length
+
 
 // Custom filter for coordinates within a bounding box defined in km.
 

@@ -1,0 +1,23 @@
+.FileTable table {
+    border: none;
+    background: aliceblue;
+}
+
+.FileTable th {
+    padding: 0.25em 0.5em;
+}
+
+.FileTable tr:last-child th {
+    border-bottom: 1px solid gray;
+}
+
+.FileTable td {
+    padding: 0.25em 0.5em;
+    border: none;
+    border-bottom: 1px solid grey;
+    border-right: 1px solid grey;
+}
+
+.FileTable tr:last-child td {
+    border-bottom: none;
+}

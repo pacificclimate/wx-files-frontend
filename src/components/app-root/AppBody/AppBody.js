@@ -15,13 +15,16 @@ import CoordinatesNearColumnFilter
   from '../../data-grid/column-filters/CoordinatesNearColumnFilter';
 import NumberRangeColumnFilter
   from '../../data-grid/column-filters/NumberRangeColumnFilter';
+import FileTable from '../../data-grid/FileTable';
+
+import styles from '../../data-grid/LocationTable/LocationTable.module.css';
 
 // TODO: div-based rendering (not table)
 // TODO: Fix bad factorization of LocationTable and AppBody
 // TODO: Implement expander for files as a react-table component
 
 export default function AppBody() {
-  const data = React.useMemo(
+  const locationData = React.useMemo(
     () => locations.map(
       location => {
         const { latitude, longitude, files } = location;
@@ -54,10 +57,10 @@ export default function AppBody() {
     []
   );
 
-  const columns = React.useMemo(
+  const locationColumns = React.useMemo(
     () => [
       {
-        Header: false,
+        Header: "Files",
         id: "expander",
         Cell: ({ row }) => (
           <span {...row.getToggleRowExpandedProps()}>
@@ -114,12 +117,53 @@ export default function AppBody() {
     []
   );
 
+  const fileColumns = React.useMemo(
+    () => [
+      {
+        Header: "Type",
+        accessor: "fileType",
+        Cell: ({ value }) => value === 'weather' ? 'Wx' : 'Summ',
+        Filter: SelectColumnFilter,
+        filter: 'includes',
+      },
+      {
+        Header: "Scenario",
+        accessor: "scenario",
+        Filter: SelectColumnFilter,
+        filter: 'includesIfDefined',
+      },
+      {
+        Header: "Time Period",
+        accessor: "timePeriod",
+        Cell: ({ value }) => {
+          console.log("### file cell timePeriod", value)
+          return value ?
+            `${value.start.getUTCFullYear()} - ${value.end.getUTCFullYear()}` :
+            'all';
+        },
+      },
+      {
+        Header: "Ensemble Statistic",
+        accessor: "ensembleStatistic",
+        Filter: SelectColumnFilter,
+        filter: 'includesIfDefined',
+      },
+      {
+        Header: "Variables",
+        accessor: "variables",
+        Filter: SelectColumnFilter,
+        filter: 'includesIfDefined',
+      },
+    ],
+    []
+  );
+
   const renderFiles = React.useCallback(
     ({ row, visibleColumns }) => (
-      <tr>
+      <tr className={styles.expander}>
         <td>&nbsp;</td>
         <td colSpan={visibleColumns.length-1}>
-          'Files'
+          <FileTable columns={fileColumns} data={row.original.files}/>
         </td>
       </tr>
     )
@@ -129,8 +173,8 @@ export default function AppBody() {
     <Row>
       <Col lg={12}>
         <LocationTable
-          columns={columns}
-          data={data}
+          columns={locationColumns}
+          data={locationData}
           renderRowExpansion={renderFiles}
         />
       </Col>

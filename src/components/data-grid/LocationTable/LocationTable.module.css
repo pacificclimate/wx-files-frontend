@@ -3,17 +3,31 @@
 }
 
 .LocationTable table {
-    /*border: solid 1px blue;*/
+    border: solid 2px gray;
+    background: papayawhip;
 }
 
 .LocationTable th {
-    padding: 0.5rem;
+    padding: 0.5em;
     border-right: solid 1px gray;
     font-weight: bold;
 }
 
+.LocationTable tr:first-child td {
+    border-top: 2px solid gray;
+}
+
 .LocationTable td {
-    padding: 0.5rem;
-    border: solid 1px gray;
-    background: papayawhip;
+    padding: 0.5em;
+    border-top: 2px solid gray;
+    border-right: 1px solid gray;
+}
+
+.LocationTable .expander {
+    font-size: 90%;
+}
+
+.LocationTable .expander > td {
+    padding: 0;
+    border-top: 1px solid gray;
 }
