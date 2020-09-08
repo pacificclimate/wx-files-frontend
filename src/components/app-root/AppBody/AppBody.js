@@ -154,6 +154,12 @@ export default function AppBody() {
         Filter: SelectColumnFilter,
         filter: 'includesIfDefined',
       },
+      {
+        Header: "Download",
+        accessor: "contentUri",
+        disableFilters: true,
+        Cell: ({ value }) => (<a href={"#"}>Download ({value})</a>)
+      },
     ],
     []
   );
