@@ -1,0 +1,19 @@
+.DataGrid {
+    padding: 1rem;
+}
+
+.DataGrid table {
+    /*border: solid 1px blue;*/
+}
+
+.DataGrid th {
+    /*background: aliceblue;*/
+    /*color: black;*/
+    font-weight: bold;
+}
+
+.DataGrid td {
+    padding: 0.5rem;
+    border: solid 1px gray;
+    background: papayawhip;
+}
