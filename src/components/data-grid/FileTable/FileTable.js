@@ -3,9 +3,10 @@ import { textStartsWith } from '../column-filters/filterTypes';
 import DefaultColumnFilter from '../column-filters/DefaultColumnFilter';
 import { useFilters, useSortBy, useTable } from 'react-table';
 import styles from '../FileTable/FileTable.module.css';
+import SelectColumnFilter from '../column-filters/SelectColumnFilter';
 
 
-export default function FileTable({ columns, data }) {
+export default function FileTable({ data }) {
   const filterTypes = React.useMemo(
     () => ({
       textStartsWith,
@@ -21,6 +22,48 @@ export default function FileTable({ columns, data }) {
     []
   );
 
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Type",
+        accessor: "fileType",
+        Filter: SelectColumnFilter,
+        filter: 'includes',
+      },
+      {
+        Header: "Scenario",
+        accessor: "scenario",
+        Filter: SelectColumnFilter,
+        filter: 'includesIfDefined',
+      },
+      {
+        Header: "Time Period",
+        accessor: "timePeriodDecade",
+        Filter: SelectColumnFilter,
+        filter: 'includesIfDefined',
+      },
+      {
+        Header: "Ensemble Statistic",
+        accessor: "ensembleStatistic",
+        Filter: SelectColumnFilter,
+        filter: 'includesIfDefined',
+      },
+      {
+        Header: "Variables",
+        accessor: "variables",
+        Filter: SelectColumnFilter,
+        filter: 'includesIfDefined',
+      },
+      {
+        Header: "Download",
+        accessor: "contentUri",
+        disableFilters: true,
+        Cell: ({ value }) => (<a href={"#"}>Download ({value})</a>)
+      },
+    ],
+    []
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -32,8 +75,6 @@ export default function FileTable({ columns, data }) {
     useFilters,
     useSortBy,
   );
-
-  // return 'File Table'
 
   return (
     <div className={styles.FileTable}>

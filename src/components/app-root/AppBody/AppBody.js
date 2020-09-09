@@ -78,54 +78,13 @@ export default function AppBody() {
   );
 
 
-  const fileColumns = React.useMemo(
-    () => [
-      {
-        Header: "Type",
-        accessor: "fileType",
-        Filter: SelectColumnFilter,
-        filter: 'includes',
-      },
-      {
-        Header: "Scenario",
-        accessor: "scenario",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
-      },
-      {
-        Header: "Time Period",
-        accessor: "timePeriodDecade",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
-      },
-      {
-        Header: "Ensemble Statistic",
-        accessor: "ensembleStatistic",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
-      },
-      {
-        Header: "Variables",
-        accessor: "variables",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
-      },
-      {
-        Header: "Download",
-        accessor: "contentUri",
-        disableFilters: true,
-        Cell: ({ value }) => (<a href={"#"}>Download ({value})</a>)
-      },
-    ],
-    []
-  );
 
   const renderFiles = React.useCallback(
     ({ row, visibleColumns }) => (
       <tr className={styles.expander}>
         <td>&nbsp;</td>
         <td colSpan={visibleColumns.length-1}>
-          <FileTable columns={fileColumns} data={row.original.filesData}/>
+          <FileTable data={row.original.filesData}/>
         </td>
       </tr>
     )
