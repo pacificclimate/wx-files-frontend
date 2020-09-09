@@ -109,9 +109,9 @@ export default function FileTable({ locations }) {
             filter: "textStartsWith",
           },
           {
-            Header: "Coordinates",
+            Header: "Coordinates (Lat, Lon)",
             accessor: "location.coordinates",
-            Cell: ({ value: [lat, lon] }) => `☝ ${lat}°N, ${lon}°W`,
+            Cell: ({ value: [lat, lon] }) => `☝ ${lat}, ${lon}`,
             Filter: CoordinatesNearColumnFilter,
             filter: "coordinatesWithinRadius",
           },
