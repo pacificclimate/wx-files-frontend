@@ -1,4 +1,5 @@
 import React from 'react';
+import Table from 'react-bootstrap/Table';
 import { textStartsWith } from '../column-filters/filterTypes';
 import DefaultColumnFilter from '../column-filters/DefaultColumnFilter';
 import { useFilters, useSortBy, useTable } from 'react-table';
@@ -37,7 +38,7 @@ export default function FileTable({ columns, data }) {
 
   return (
     <div className={styles.FileTable}>
-      <table
+      <Table
         {...getTableProps()}
       >
         <thead>
@@ -90,7 +91,7 @@ export default function FileTable({ columns, data }) {
           )
         })}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 }
