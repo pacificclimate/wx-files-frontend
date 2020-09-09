@@ -19,6 +19,7 @@ import CoordinatesNearColumnFilter
   from '../../column-filters/CoordinatesNearColumnFilter';
 import NumberRangeColumnFilter
   from '../../column-filters/NumberRangeColumnFilter';
+import { mapWithKey } from '../../../../utils/lodash-fp-extras';
 
 
 export default function FileTable({ locations }) {
@@ -51,7 +52,7 @@ export default function FileTable({ locations }) {
             coordinates: [latitude, longitude],
           };
 
-          return map(file => {
+          return mapWithKey((file, index) => {
             const {
               fileType, scenario, timePeriod, ensembleStatistic, variables
             } = file;
@@ -60,6 +61,7 @@ export default function FileTable({ locations }) {
               location: locationData,
               file: {
                 ...file,
+                index,
                 fileType: capitalize(fileType),
                 scenario: scenario || '???',
                 timePeriodDecade:
@@ -68,7 +70,7 @@ export default function FileTable({ locations }) {
                 variables: variables || "???",
               }
             };
-          })(files);
+          }, files);
         }),
 
         flatten,
@@ -225,6 +227,19 @@ export default function FileTable({ locations }) {
             <React.Fragment {...row.getRowProps()} >
               <tr>
                 {row.cells.map(cell => {
+                  if (cell.column.parent.id === 'Location') {
+                    // For location columns, return a <td> only for the first
+                    // cell. That <td> spans all the rows with that location.
+                    return cell.row.original.file.index === 0 && (
+                      <td rowSpan={cell.row.original.location.files.length}
+                          {...cell.getCellProps()}
+                          onClick={makeHandleClickCell(cell)}
+                      >
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  }
+                  // For file columns, always return a normal <td>.
                   return (
                     <td
                       {...cell.getCellProps()}

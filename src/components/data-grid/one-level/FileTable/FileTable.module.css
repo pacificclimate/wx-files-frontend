@@ -3,7 +3,7 @@
 }
 
 .FileTable table {
-    border: solid 2px gray;
+    border: solid 1px gray;
 }
 
 .FileTable th {
@@ -13,12 +13,12 @@
 }
 
 .FileTable tr:first-child td {
-    border-top: 2px solid gray;
+    border-top: 1px solid gray;
 }
 
 .FileTable td {
     padding: 0.5em;
-    border-top: 2px solid gray;
+    border-top: 1px solid gray;
     border-right: 1px solid gray;
 }
 
