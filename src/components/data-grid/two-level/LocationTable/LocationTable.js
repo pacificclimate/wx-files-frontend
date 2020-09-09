@@ -128,7 +128,6 @@ export default function LocationTable({ locations }) {
         Header: "Time Periods",
         accessor: "timePeriodDecades",
         Cell: ({ value }) => {
-          console.log('### timePeriodDecades column', value)
           return flow(
             map(t => `${t}s`),
             join(', '),
@@ -171,7 +170,6 @@ export default function LocationTable({ locations }) {
       default:
         break;
     }
-    // console.log('### makeHandleClickCell', cell);
   }
 
   return (
@@ -210,7 +208,6 @@ export default function LocationTable({ locations }) {
         </thead>
         <tbody {...getTableBodyProps()}>
         {rows.map(row => {
-          console.log("### location row", row)
           prepareRow(row)
           return (
             <React.Fragment {...row.getRowProps()} >
