@@ -1,8 +1,12 @@
 import React from 'react';
 import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
+
 import flow from 'lodash/fp/flow';
 import map from 'lodash/fp/map';
 import join from 'lodash/fp/join';
+import compact from 'lodash/fp/compact';
+import uniq from 'lodash/fp/uniq';
+import capitalize from 'lodash/fp/capitalize';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith
@@ -13,11 +17,12 @@ import CoordinatesNearColumnFilter
   from '../column-filters/CoordinatesNearColumnFilter';
 import NumberRangeColumnFilter from '../column-filters/NumberRangeColumnFilter';
 import FileTable from '../../data-grid/FileTable';
+import { middleDecade } from '../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
 
 
-export default function LocationTable({ data, renderRowExpansion}) {
+export default function LocationTable({ locations }) {
   const filterTypes = React.useMemo(
     () => ({
       textStartsWith,
@@ -33,6 +38,51 @@ export default function LocationTable({ data, renderRowExpansion}) {
       // TODO: This is probably not such a great default.
       filter: "textStartsWith",
     }),
+    []
+  );
+
+  // Map raw locations data into the form consumed by the data grid.
+  // This value and `columns` are closely allied.
+  const data = React.useMemo(
+    () => locations.map(
+      location => {
+        const { latitude, longitude, files } = location;
+        return ({
+          ...location,
+
+          coordinates: [latitude, longitude],
+
+          timePeriodDecades: flow(
+            map(({ timePeriod }) => middleDecade(timePeriod)),
+            compact,
+            uniq,
+          )(files),
+
+          scenarios: flow(
+            map('scenario'),
+            compact,
+            uniq,
+          )(files),
+
+          filesData: map(
+            file => {
+              const {
+                fileType, scenario, timePeriod, ensembleStatistic, variables
+              } = file;
+              return {
+                ...file,
+                fileType: capitalize(fileType),
+                scenario: scenario || '???',
+                timePeriodDecade:
+                  timePeriod ? `${middleDecade(timePeriod)}s` : "???",
+                ensembleStatistic: ensembleStatistic || "???",
+                variables: variables || "???",
+              }
+            }
+          )(files),
+        })
+      }
+    ),
     []
   );
 
