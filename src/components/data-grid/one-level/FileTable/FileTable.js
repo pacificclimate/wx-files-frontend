@@ -123,30 +123,35 @@ export default function FileTable({ locations }) {
             accessor: "file.fileType",
             Filter: SelectColumnFilter,
             filter: 'includes',
+            disableSortBy: true,
           },
           {
             Header: "Scenario",
             accessor: "file.scenario",
             Filter: SelectColumnFilter,
             filter: 'includesIfDefined',
+            disableSortBy: true,
           },
           {
             Header: "Time Period",
             accessor: "file.timePeriodDecade",
             Filter: SelectColumnFilter,
             filter: 'includesIfDefined',
+            disableSortBy: true,
           },
           {
             Header: "Ensemble Statistic",
             accessor: "file.ensembleStatistic",
             Filter: SelectColumnFilter,
             filter: 'includesIfDefined',
+            disableSortBy: true,
           },
           {
             Header: "Variables",
             accessor: "file.variables",
             Filter: SelectColumnFilter,
             filter: 'includesIfDefined',
+            disableSortBy: true,
           },
           {
             Header: "Download",
@@ -154,7 +159,8 @@ export default function FileTable({ locations }) {
             disableFilters: true,
             Cell: ({ value }) => (
               <a href={"#"} title={value}>Download</a>
-            )
+            ),
+            disableSortBy: true,
           },
         ],
       }
