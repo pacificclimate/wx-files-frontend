@@ -61,7 +61,7 @@ However, it can be useful to manually build and run a production Docker image.
 ### Build docker image
 
 ```bash
-docker build -t wx-files-frontend \
+docker build -t wx-files-frontendd \
     --build-arg REACT_APP_VERSION="$(./generate-commitish.sh)" .
 ```
 

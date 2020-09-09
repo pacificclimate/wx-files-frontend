@@ -1,5 +1,4 @@
 import React from 'react';
-import Table from 'react-bootstrap/Table';
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith
 } from '../column-filters/filterTypes';
@@ -124,7 +123,7 @@ export default function LocationTable({ data, renderRowExpansion}) {
 
   return (
     <div className={styles.LocationTable}>
-      <Table
+      <table
         {...getTableProps()}
       >
         <thead>
@@ -179,7 +178,7 @@ export default function LocationTable({ data, renderRowExpansion}) {
           )
         })}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }
