@@ -48,6 +48,47 @@ value when the image is run.
 `NODE_ENV`
 * [**Automatically set; cannot be overridden manually.**](https://facebook.github.io/create-react-app/docs/adding-custom-environment-variables)
 
+## Docker
+
+We use Docker for dev/staging/test and production deployments.
+
+### Manual processes
+
+In general, PCIC DevOps automates Docker image building in our repositories,
+and PCIC IT manages production deployment (using `docker-compose`).  
+However, it can be useful to manually build and run a production Docker image.
+
+### Build docker image
+
+```bash
+docker build -t wx-files-frontendd \
+    --build-arg REACT_APP_VERSION="$(./generate-commitish.sh)" .
+```
+
+**IMPORTANT**: Setting the build arg `REACT_APP_VERSION` as above is the most reliable
+way to inject an accurate version id into the final app. This value can be overridden
+when the image is run (by specifying the environment variable of the same name),
+but it is not recommended, as it invites error.
+
+### Run docker image
+
+As described above, environment variables configure the app.
+All are given default development and production values in the files
+`.env`, `.env.development`, and `.env.production`.
+
+These can be overridden at run time by providing them in the `docker run` 
+command (`-e` option), or, equivalently, in the appropriate 
+`docker-compose.yaml` element.
+
+Typical run:
+
+```bash
+docker run --restart=unless-stopped -d \
+  -p <external port>:8080 \
+  --name wx-files-frontend \
+  wx-files-frontend:<tag>
+```
+
 ## Project initialization
 
 This project was initialized using `create-react-app`.
