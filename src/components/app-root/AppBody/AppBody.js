@@ -77,65 +77,6 @@ export default function AppBody() {
     []
   );
 
-  const locationColumns = React.useMemo(
-    () => [
-      {
-        Header: "Files",
-        id: "expander",
-        Cell: ({ row }) => (
-          <span {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
-          </span>
-        ),
-      },
-      {
-        Header: "City",
-        accessor: "city",
-      },
-      {
-        Header: "Province",
-        accessor: "province",
-        Filter: SelectColumnFilter,
-        filter: 'includes',
-      },
-      {
-        Header: "Code",
-        accessor: "code",
-      },
-      {
-        Header: "Coordinates",
-        accessor: "coordinates",
-        Cell: ({ value: [lat, lon] }) => `☝ ${lat}°N, ${lon}°W`,
-        Filter: CoordinatesNearColumnFilter,
-        filter: "coordinatesWithinRadius",
-      },
-      {
-        Header: "Elevation",
-        accessor: "elevation",
-        Filter: NumberRangeColumnFilter,
-        filter: 'between',
-      },
-      {
-        Header: "Time Periods",
-        accessor: "timePeriodDecades",
-        Cell: ({ value }) => {
-          console.log('### timePeriodDecades column', value)
-          return flow(
-            map(t => `${t}s`),
-            join(', '),
-          )(value);
-        },
-        filter: 'text',
-      },
-      {
-        Header: "Scenarios",
-        accessor: "scenarios",
-        Cell: ({ value }) => value.join(', '),
-        filter: "text",
-      },
-    ],
-    []
-  );
 
   const fileColumns = React.useMemo(
     () => [
@@ -194,7 +135,6 @@ export default function AppBody() {
     <Row>
       <Col lg={12}>
         <LocationTable
-          columns={locationColumns}
           data={locationsData}
           renderRowExpansion={renderFiles}
         />
