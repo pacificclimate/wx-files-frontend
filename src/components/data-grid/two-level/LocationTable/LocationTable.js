@@ -10,14 +10,14 @@ import capitalize from 'lodash/fp/capitalize';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith
-} from '../column-filters/filterTypes';
-import DefaultColumnFilter from '../column-filters/DefaultColumnFilter';
-import SelectColumnFilter from '../column-filters/SelectColumnFilter';
+} from '../../column-filters/filterTypes';
+import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
+import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 import CoordinatesNearColumnFilter
-  from '../column-filters/CoordinatesNearColumnFilter';
-import NumberRangeColumnFilter from '../column-filters/NumberRangeColumnFilter';
-import FileTable from '../../data-grid/FileTable';
-import { middleDecade } from '../../../utils/date-and-time';
+  from '../../column-filters/CoordinatesNearColumnFilter';
+import NumberRangeColumnFilter from '../../column-filters/NumberRangeColumnFilter';
+import FileTable from '../FileTable';
+import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
 

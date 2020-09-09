@@ -1,10 +1,10 @@
 import React from 'react';
 import { useFilters, useSortBy, useTable } from 'react-table';
-import { textStartsWith } from '../column-filters/filterTypes';
-import DefaultColumnFilter from '../column-filters/DefaultColumnFilter';
-import SelectColumnFilter from '../column-filters/SelectColumnFilter';
+import { textStartsWith } from '../../column-filters/filterTypes';
+import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
+import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 
-import styles from '../FileTable/FileTable.module.css';
+import styles from './FileTable.module.css';
 
 
 export default function FileTable({ data }) {
@@ -77,6 +77,8 @@ export default function FileTable({ data }) {
     useFilters,
     useSortBy,
   );
+
+  console.log('### file table styles', styles)
 
   return (
     <div className={styles.FileTable}>
