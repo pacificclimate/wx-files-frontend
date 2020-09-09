@@ -2,7 +2,7 @@
 
 UI for the PCIC Weather Files service.
 
-This app provides an interface for selecting and downloading weather files 
+This app provides an interface for selecting and downloading weather files
 (wx files).
 
 ## Configuration
@@ -25,7 +25,7 @@ Brief summary:
 * `.env.production`: Production-specific settings (`npm run build`)
 
 For more details, see the
-[CRA documentation](https://facebook.github.io/create-react-app/docs/adding-custom-environment-variables)).
+[CRA documentation](https://facebook.github.io/create-react-app/docs/adding-custom-environment-variables).
 
 Environment variables for configuring the app are:
 
@@ -36,9 +36,9 @@ server.
 
 `REACT_APP_VERSION`
 * Version of the app.
-* This value should be set using `generate-commitish.sh` when the Docker image 
+* This value should be set using `generate-commitish.sh` when the Docker image
 is built (see below).
-* It is _not_ recommended to manually override the automatically generated 
+* It is _not_ recommended to manually override the automatically generated
 value when the image is run.
 * No default value for this variable is provided in any `.env` file.
 
@@ -61,7 +61,7 @@ However, it can be useful to manually build and run a production Docker image.
 ### Build docker image
 
 ```bash
-docker build -t wx-files-frontendd \
+docker build -t wx-files-frontend \
     --build-arg REACT_APP_VERSION="$(./generate-commitish.sh)" .
 ```
 
@@ -76,8 +76,8 @@ As described above, environment variables configure the app.
 All are given default development and production values in the files
 `.env`, `.env.development`, and `.env.production`.
 
-These can be overridden at run time by providing them in the `docker run` 
-command (`-e` option), or, equivalently, in the appropriate 
+These can be overridden at run time by providing them in the `docker run`
+command (`-e` option), or, equivalently, in the appropriate
 `docker-compose.yaml` element.
 
 Typical run:
