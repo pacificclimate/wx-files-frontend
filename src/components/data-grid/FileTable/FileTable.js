@@ -1,9 +1,10 @@
 import React from 'react';
+import { useFilters, useSortBy, useTable } from 'react-table';
 import { textStartsWith } from '../column-filters/filterTypes';
 import DefaultColumnFilter from '../column-filters/DefaultColumnFilter';
-import { useFilters, useSortBy, useTable } from 'react-table';
-import styles from '../FileTable/FileTable.module.css';
 import SelectColumnFilter from '../column-filters/SelectColumnFilter';
+
+import styles from '../FileTable/FileTable.module.css';
 
 
 export default function FileTable({ data }) {
@@ -17,6 +18,7 @@ export default function FileTable({ data }) {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: DefaultColumnFilter,
+      // TODO: This is probably not such a great default.
       filter: "textStartsWith",
     }),
     []

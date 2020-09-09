@@ -1,17 +1,20 @@
 import React from 'react';
+import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
+import flow from 'lodash/fp/flow';
+import map from 'lodash/fp/map';
+import join from 'lodash/fp/join';
+
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith
 } from '../column-filters/filterTypes';
 import DefaultColumnFilter from '../column-filters/DefaultColumnFilter';
-import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
-import styles from './LocationTable.module.css';
 import SelectColumnFilter from '../column-filters/SelectColumnFilter';
 import CoordinatesNearColumnFilter
   from '../column-filters/CoordinatesNearColumnFilter';
 import NumberRangeColumnFilter from '../column-filters/NumberRangeColumnFilter';
-import flow from 'lodash/fp/flow';
-import map from 'lodash/fp/map';
-import join from 'lodash/fp/join';
+import FileTable from '../../data-grid/FileTable';
+
+import styles from './LocationTable.module.css';
 
 
 export default function LocationTable({ data, renderRowExpansion}) {
@@ -173,7 +176,14 @@ export default function LocationTable({ data, renderRowExpansion}) {
                   )
                 })}
               </tr>
-              {row.isExpanded ? renderRowExpansion({ row, visibleColumns }) : null}
+              {row.isExpanded ? (
+                  <tr className={styles.expander}>
+                    <td>&nbsp;</td>
+                    <td colSpan={visibleColumns.length-1}>
+                      <FileTable data={row.original.filesData}/>
+                    </td>
+                  </tr>
+              ) : null}
             </React.Fragment>
           )
         })}

@@ -10,17 +10,7 @@ import capitalize from 'lodash/fp/capitalize';
 
 import locations from '../../../assets/locations';
 import LocationTable from '../../data-grid/LocationTable';
-import SelectColumnFilter
-  from '../../data-grid/column-filters/SelectColumnFilter';
-import CoordinatesNearColumnFilter
-  from '../../data-grid/column-filters/CoordinatesNearColumnFilter';
-import NumberRangeColumnFilter
-  from '../../data-grid/column-filters/NumberRangeColumnFilter';
-import FileTable from '../../data-grid/FileTable';
 
-import styles from '../../data-grid/LocationTable/LocationTable.module.css';
-
-// TODO: Fix bad factorization of LocationTable and AppBody
 // TODO: Add expand-all
 
 
@@ -77,25 +67,11 @@ export default function AppBody() {
     []
   );
 
-
-
-  const renderFiles = React.useCallback(
-    ({ row, visibleColumns }) => (
-      <tr className={styles.expander}>
-        <td>&nbsp;</td>
-        <td colSpan={visibleColumns.length-1}>
-          <FileTable data={row.original.filesData}/>
-        </td>
-      </tr>
-    )
-  )
-
   return (
     <Row>
       <Col lg={12}>
         <LocationTable
           data={locationsData}
-          renderRowExpansion={renderFiles}
         />
       </Col>
     </Row>
