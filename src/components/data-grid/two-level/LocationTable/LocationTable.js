@@ -10,14 +10,14 @@ import capitalize from 'lodash/fp/capitalize';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith
-} from '../column-filters/filterTypes';
-import DefaultColumnFilter from '../column-filters/DefaultColumnFilter';
-import SelectColumnFilter from '../column-filters/SelectColumnFilter';
+} from '../../column-filters/filterTypes';
+import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
+import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 import CoordinatesNearColumnFilter
-  from '../column-filters/CoordinatesNearColumnFilter';
-import NumberRangeColumnFilter from '../column-filters/NumberRangeColumnFilter';
-import FileTable from '../../data-grid/FileTable';
-import { middleDecade } from '../../../utils/date-and-time';
+  from '../../column-filters/CoordinatesNearColumnFilter';
+import NumberRangeColumnFilter from '../../column-filters/NumberRangeColumnFilter';
+import FileTable from '../FileTable';
+import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
 
@@ -100,6 +100,9 @@ export default function LocationTable({ locations }) {
       {
         Header: "City",
         accessor: "city",
+        Filter: ({ column }) => (
+          <DefaultColumnFilter size={12} column={column} />
+        ),
       },
       {
         Header: "Province",
@@ -110,6 +113,9 @@ export default function LocationTable({ locations }) {
       {
         Header: "Code",
         accessor: "code",
+        Filter: ({ column }) => (
+          <DefaultColumnFilter size={1} column={column} />
+        ),
       },
       {
         Header: "Coordinates",
@@ -128,7 +134,6 @@ export default function LocationTable({ locations }) {
         Header: "Time Periods",
         accessor: "timePeriodDecades",
         Cell: ({ value }) => {
-          console.log('### timePeriodDecades column', value)
           return flow(
             map(t => `${t}s`),
             join(', '),
@@ -171,7 +176,6 @@ export default function LocationTable({ locations }) {
       default:
         break;
     }
-    // console.log('### makeHandleClickCell', cell);
   }
 
   return (
@@ -210,7 +214,6 @@ export default function LocationTable({ locations }) {
         </thead>
         <tbody {...getTableBodyProps()}>
         {rows.map(row => {
-          console.log("### location row", row)
           prepareRow(row)
           return (
             <React.Fragment {...row.getRowProps()} >

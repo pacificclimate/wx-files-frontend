@@ -1,0 +1,36 @@
+.FileTable {
+    padding: 1em;
+}
+
+.FileTable table {
+    border: solid 1px gray;
+}
+
+.FileTable tr:first-child th {
+    border-top: 1px solid gray;
+}
+
+.FileTable th {
+    padding: 0.5em;
+    border-right: solid 1px gray;
+    font-weight: bold;
+}
+
+.FileTable tr:first-child td {
+    border-top: 1px solid gray;
+}
+
+.FileTable td {
+    padding: 0.5em;
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+.FileTable .expander {
+    font-size: 90%;
+}
+
+.FileTable .expander > td {
+    padding: 0;
+    border-top: 1px solid gray;
+}

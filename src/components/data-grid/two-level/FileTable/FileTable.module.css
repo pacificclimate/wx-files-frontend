@@ -1,0 +1,32 @@
+/*
+Note: We need to increase the specificity of the .FileTable xxx selectors,
+otherwise they get overridden by .LocationTable (for reasons not quite clear
+to me yet). There's a trick for that: double the specifier. Hence the odd
+looking `.FileTable.FileTable`. For more info, see
+https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity, "Instead of
+using !important".
+*/
+
+.FileTable.FileTable table {
+    border: none;
+    background: aliceblue;
+}
+
+.FileTable.FileTable th {
+    padding: 0.25em 0.5em;
+}
+
+.FileTable.FileTable tr:last-child th {
+    border-bottom: 1px solid gray;
+}
+
+.FileTable.FileTable td {
+    padding: 0.25em 0.5em;
+    border: none;
+    border-bottom: 1px solid grey;
+    border-right: 1px solid grey;
+}
+
+.FileTable.FileTable tr:last-child td {
+    border-bottom: none;
+}
