@@ -6,6 +6,10 @@
     border: solid 1px gray;
 }
 
+.FileTable tr:first-child th {
+    border-top: 1px solid gray;
+}
+
 .FileTable th {
     padding: 0.5em;
     border-right: solid 1px gray;

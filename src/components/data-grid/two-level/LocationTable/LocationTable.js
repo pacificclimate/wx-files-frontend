@@ -100,6 +100,9 @@ export default function LocationTable({ locations }) {
       {
         Header: "City",
         accessor: "city",
+        Filter: ({ column }) => (
+          <DefaultColumnFilter size={12} column={column} />
+        ),
       },
       {
         Header: "Province",
@@ -110,6 +113,9 @@ export default function LocationTable({ locations }) {
       {
         Header: "Code",
         accessor: "code",
+        Filter: ({ column }) => (
+          <DefaultColumnFilter size={1} column={column} />
+        ),
       },
       {
         Header: "Coordinates",

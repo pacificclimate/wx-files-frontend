@@ -89,9 +89,13 @@ export default function FileTable({ locations }) {
           {
             Header: "City",
             accessor: "location.city",
+            Filter: ({ column }) => (
+              <DefaultColumnFilter size={12} column={column} />
+            ),
+            filter: "textStartsWith",
           },
           {
-            Header: "Province",
+            Header: "Prov",
             accessor: "location.province",
             Filter: SelectColumnFilter,
             filter: 'includes',
@@ -99,6 +103,10 @@ export default function FileTable({ locations }) {
           {
             Header: "Code",
             accessor: "location.code",
+            Filter: ({ column }) => (
+              <DefaultColumnFilter size={1} column={column} />
+            ),
+            filter: "textStartsWith",
           },
           {
             Header: "Coordinates",
@@ -206,9 +214,9 @@ export default function FileTable({ locations }) {
       <table
         {...getTableProps()}
       >
-        <thead>
+        <>
         {headerGroups.map(headerGroup => (
-          <>
+          <thead>
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <th
@@ -232,9 +240,9 @@ export default function FileTable({ locations }) {
                 </th>
               ))}
             </tr>
-          </>
+          </thead>
         ))}
-        </thead>
+        </>
         <tbody {...getTableBodyProps()}>
         {mapWithKey((row, rowIndex) => {
           // There is a value `row.index`, but it does not reflect row
