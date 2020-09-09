@@ -120,7 +120,7 @@ export default function LocationTable({ locations }) {
       {
         Header: "Coordinates",
         accessor: "coordinates",
-        Cell: ({ value: [lat, lon] }) => `☝ ${lat}°N, ${lon}°W`,
+        Cell: ({ value: [lat, lon] }) => `☝ ${lat}, ${lon}`,
         Filter: CoordinatesNearColumnFilter,
         filter: "coordinatesWithinRadius",
       },

@@ -19,7 +19,7 @@ export default function CoordinatesNearColumnFilter({
           const val = e.target.value
           setFilter((old = []) => [val ? parseFloat(val) : undefined, old[1], old[2]])
         }}
-        placeholder={`Lat (°N)`}
+        placeholder={`Lat`}
         style={{
           width: '70px',
           marginRight: '0.5rem',
@@ -33,7 +33,7 @@ export default function CoordinatesNearColumnFilter({
           const val = e.target.value
           setFilter((old = []) => [old[0], val ? parseFloat(val) : undefined, old[2]])
         }}
-        placeholder={`Lon (°W)`}
+        placeholder={`Lon`}
         style={{
           width: '70px',
           marginLeft: '0.5rem',
