@@ -78,8 +78,6 @@ export default function FileTable({ data }) {
     useSortBy,
   );
 
-  console.log('### file table styles', styles)
-
   return (
     <div className={styles.FileTable}>
       <table
