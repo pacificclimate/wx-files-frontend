@@ -174,12 +174,21 @@ export default function LocationTable({ locations }) {
     useExpanded,
   );
 
+  // TODO: Make this a prop of the table?
+  const default_coord_radius = 10;
+
   // TODO: For coordinates, at least, this could be a click handler on the
   // icon.
   const makeHandleClickCell = cell => () => {
     switch(cell.column.id) {
       case "coordinates":
-        setFilter("coordinates", [...cell.row.values.coordinates, 100]);
+        const coord_radius =
+          (cell.column.filterValue && cell.column.filterValue[2]) ||
+          default_coord_radius;
+        setFilter(
+          "coordinates",
+          [...cell.row.values.coordinates, coord_radius]
+        );
         break;
       default:
         break;

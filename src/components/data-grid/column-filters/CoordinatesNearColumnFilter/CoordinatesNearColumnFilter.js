@@ -43,6 +43,7 @@ export default function CoordinatesNearColumnFilter({
       <input
         value={filterValue[2] || ''}
         type="number"
+        step={5}
         onChange={e => {
           const val = e.target.value
           setFilter((old = []) => [old[0], old[1], val ? parseFloat(val) : undefined])
