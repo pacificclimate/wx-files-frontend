@@ -16,5 +16,5 @@ test('renders expected top-level columns', () => {
   expect(screen.getByText('Coordinates')).toBeInTheDocument();
   expect(screen.getByText('Elevation')).toBeInTheDocument();
   expect(screen.getByText('Time Periods')).toBeInTheDocument();
-  expect(screen.getByText('Scenarios')).toBeInTheDocument();
+  expect(screen.queryByText('Scenarios')).toBeNull();  // Hidden
 });
