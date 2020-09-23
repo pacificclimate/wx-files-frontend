@@ -182,7 +182,6 @@ export default function LocationTable({ locations }) {
   const makeHandleClickCell = cell => () => {
     switch(cell.column.id) {
       case "coordinates":
-        console.log("### coordinates cell", cell)
         const coord_radius =
           (cell.column.filterValue && cell.column.filterValue[2]) ||
           default_coord_radius;
