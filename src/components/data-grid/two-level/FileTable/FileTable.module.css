@@ -9,7 +9,7 @@ using !important".
 
 .FileTable.FileTable table {
     border: none;
-    background: aliceblue;
+    /*background: aliceblue;*/
 }
 
 .FileTable.FileTable th {
