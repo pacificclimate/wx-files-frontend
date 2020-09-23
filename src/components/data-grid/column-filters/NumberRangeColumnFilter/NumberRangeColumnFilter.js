@@ -1,4 +1,5 @@
 import React from 'react';
+import { makeFilterNumberInputOnChange } from '../../../../utils/filters';
 
 // Custom filter UI for selecting number within a range (min, max).
 
@@ -24,10 +25,7 @@ export default function NumberRangeColumnFilter({
       <input
         value={filterValue[0] || ''}
         type="number"
-        onChange={e => {
-          const val = e.target.value
-          setFilter((old = []) => [val ? parseInt(val, 10) : undefined, old[1]])
-        }}
+        onChange={makeFilterNumberInputOnChange(setFilter, 0)}
         placeholder={`Min (${min})`}
         style={{
           width: '70px',
@@ -38,16 +36,15 @@ export default function NumberRangeColumnFilter({
       <input
         value={filterValue[1] || ''}
         type="number"
-        onChange={e => {
-          const val = e.target.value
-          setFilter((old = []) => [old[0], val ? parseInt(val, 10) : undefined])
-        }}
+        onChange={makeFilterNumberInputOnChange(setFilter, 1)}
         placeholder={`Max (${max})`}
         style={{
           width: '70px',
           marginLeft: '0.5rem',
         }}
+
       />
+      <button onClick={() => setFilter(undefined)}>Clear</button>
     </div>
   )
 }
