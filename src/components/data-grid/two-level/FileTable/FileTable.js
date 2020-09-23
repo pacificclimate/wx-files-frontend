@@ -18,8 +18,8 @@ export default function FileTable({ data }) {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: DefaultColumnFilter,
-      // TODO: This is probably not such a great default.
-      filter: "textStartsWith",
+      // This hides all filters.
+      disableFilters: true,
     }),
     []
   );
