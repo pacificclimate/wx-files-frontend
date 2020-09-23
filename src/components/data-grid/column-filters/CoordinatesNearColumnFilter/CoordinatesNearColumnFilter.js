@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { makeFilterNumberInputOnChange} from '../../../../utils/filters';
 
 // Custom UI for selecting a coordinates (lat, lon pair) near given coordinates.
 
@@ -15,10 +15,7 @@ export default function CoordinatesNearColumnFilter({
       <input
         value={filterValue[0] || ''}
         type="number"
-        onChange={e => {
-          const val = e.target.value
-          setFilter((old = []) => [val ? parseFloat(val) : undefined, old[1], old[2]])
-        }}
+        onChange={makeFilterNumberInputOnChange(setFilter, 0)}
         placeholder={`Lat`}
         style={{
           width: '70px',
@@ -29,10 +26,7 @@ export default function CoordinatesNearColumnFilter({
       <input
         value={filterValue[1] || ''}
         type="number"
-        onChange={e => {
-          const val = e.target.value
-          setFilter((old = []) => [old[0], val ? parseFloat(val) : undefined, old[2]])
-        }}
+        onChange={makeFilterNumberInputOnChange(setFilter, 1)}
         placeholder={`Lon`}
         style={{
           width: '70px',
@@ -44,10 +38,7 @@ export default function CoordinatesNearColumnFilter({
         value={filterValue[2] || ''}
         type="number"
         step={5}
-        onChange={e => {
-          const val = e.target.value
-          setFilter((old = []) => [old[0], old[1], val ? parseFloat(val) : undefined])
-        }}
+        onChange={makeFilterNumberInputOnChange(setFilter, 2)}
         placeholder={`km`}
         style={{
           width: '70px',

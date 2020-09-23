@@ -127,6 +127,7 @@ export default function LocationTable({ locations }) {
       {
         Header: "Elevation",
         accessor: "elevation",
+        Cell: ({ value: elevation }) => `☝ ${elevation}`,
         Filter: NumberRangeColumnFilter,
         filter: 'between',
       },
@@ -177,17 +178,22 @@ export default function LocationTable({ locations }) {
   // TODO: Make this a prop of the table?
   const default_coord_radius = 10;
 
-  // TODO: For coordinates, at least, this could be a click handler on the
-  // icon.
+  // TODO: For coordinates and elevation, this could be a click handler on the
+  //  icon.
   const makeHandleClickCell = cell => () => {
     switch(cell.column.id) {
       case "coordinates":
+        const { coordinates } = cell.row.values;
         const coord_radius =
           (cell.column.filterValue && cell.column.filterValue[2]) ||
           default_coord_radius;
+        setFilter("coordinates", [...coordinates, coord_radius]);
+        break;
+    case "elevation":
+        const { elevation } = cell.row.values;
         setFilter(
-          "coordinates",
-          [...cell.row.values.coordinates, coord_radius]
+          "elevation",
+          [0.9 * elevation, 1.1 * elevation].map(Math.round)
         );
         break;
       default:
