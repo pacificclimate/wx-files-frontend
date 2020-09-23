@@ -249,6 +249,10 @@ export default function FileTable({ locations }) {
           // filtering. We need the index within the set of filtered rows.
           // Hence `rowIndex`.
           prepareRow(row)
+          const newLocation = rowIndex === 0 || (
+            row.original.location !==
+            rows[rowIndex - 1].original.location
+          );
           return (
             <React.Fragment {...row.getRowProps()} >
               <tr>
@@ -256,16 +260,12 @@ export default function FileTable({ locations }) {
                   if (cell.column.parent.id === 'Location') {
                     // For location columns, return a <td> only for the first
                     // cell. That <td> spans all the rows with that location.
-                    return (
-                      rowIndex === 0 || (
-                        row.original.location !==
-                        rows[rowIndex-1].original.location
-                      )
-                    ) && (
+                    return newLocation && (
                       <td
                         rowSpan={
                           rowsByLocationId[row.original.location.id].length
                         }
+                        className={styles.newLocation}
                         {...cell.getCellProps()}
                         onClick={makeHandleClickCell(cell)}
                       >
@@ -276,6 +276,7 @@ export default function FileTable({ locations }) {
                   // For file columns, always return a normal <td>.
                   return (
                     <td
+                      className={newLocation ? styles.newLocation : ''}
                       {...cell.getCellProps()}
                       onClick={makeHandleClickCell(cell)}
                     >
