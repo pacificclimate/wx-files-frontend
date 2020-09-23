@@ -160,7 +160,15 @@ export default function LocationTable({ locations }) {
     setFilter,
     visibleColumns,
   } = useTable(
-    { columns, data, defaultColumn, filterTypes, },
+    {
+      columns,
+      data,
+      initialState: {
+        hiddenColumns: ["scenarios"],
+      },
+      defaultColumn,
+      filterTypes,
+    },
     useFilters,
     useSortBy,
     useExpanded,
