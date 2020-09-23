@@ -67,7 +67,7 @@ export function coordinatesWithinRadius(rows, id, filterValue) {
   const dist = (lat1, lon1, lat2, lon2) => {
     // Compute distance between two lat-lon points using haversine formula.
     // Courtesy of http://www.movable-type.co.uk/scripts/latlong.html .
-    // Cool new thing: Many non-ascii characters are legit in identifiers!
+    // Cool new thing: Many non-ascii characters are legit in JS identifiers!
     const R = 6371; // km
     const d2R = Math.PI / 180;
     const φ1 = lat1 * d2R;
@@ -82,6 +82,11 @@ export function coordinatesWithinRadius(rows, id, filterValue) {
   }
 
   return rows.filter(row => {
+    // We don't want to auto-remove the filter if a single value is transiently
+    // undefined. So we do this filtering instead.
+    if (!latCentre || !lonCentre || !distance) {
+      return true;
+    }
     const [latitude, longitude] = row.values[id];
     return dist(latCentre, lonCentre, latitude, longitude) < distance;
   });
