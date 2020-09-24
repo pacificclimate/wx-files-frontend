@@ -9,13 +9,18 @@ import uniq from 'lodash/fp/uniq';
 import capitalize from 'lodash/fp/capitalize';
 
 import {
-  coordinatesInBox, coordinatesWithinRadius, textStartsWith
+  coordinatesInBox, coordinatesWithinRadius, textStartsWith,
+  includesIfDefined, includesInArrayOfType,
+
 } from '../../column-filters/filterTypes';
 import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
 import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 import CoordinatesNearColumnFilter
   from '../../column-filters/CoordinatesNearColumnFilter';
-import NumberRangeColumnFilter from '../../column-filters/NumberRangeColumnFilter';
+import NumberRangeColumnFilter from
+    '../../column-filters/NumberRangeColumnFilter';
+import SelectArrayColumnFilter
+  from '../../column-filters/SelectArrayColumnFilter';
 import FileTable from '../FileTable';
 import { middleDecade } from '../../../../utils/date-and-time';
 
@@ -28,6 +33,8 @@ export default function LocationTable({ locations }) {
       textStartsWith,
       coordinatesInBox,
       coordinatesWithinRadius,
+      includesIfDefined,
+      includesInArrayOfType,
     }),
     []
   );
@@ -140,7 +147,13 @@ export default function LocationTable({ locations }) {
             join(', '),
           )(value);
         },
-        filter: 'text',
+        Filter: ({ column }) => (
+          <SelectArrayColumnFilter
+            toString={option => `${option}s`}
+            column={column}
+          />
+        ),
+        filter: includesInArrayOfType(Number),
       },
       {
         Header: "Scenarios",
