@@ -12,8 +12,8 @@ import capitalize from 'lodash/fp/capitalize';
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith,
   includesIfDefined, includesInArrayOfType,
-
 } from '../../column-filters/filterTypes';
+import { numeric, numericArray } from '../../sortTypes';
 import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
 import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 import CoordinatesNearColumnFilter
@@ -23,11 +23,13 @@ import NumberRangeColumnFilter from
 import SelectArrayColumnFilter
   from '../../column-filters/SelectArrayColumnFilter';
 import FileTable from '../FileTable';
+import SortIndicator from '../../indicators/SortIndicator';
 import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
 
 
+// TODO: make this a component like SortIndicator
 const [filesExpandedIndicator, filesCollapsedIndicator] =
   ['Hide', 'Show'].map(
     v => <Button size='sm' variant='outline-primary'>{v}</Button>
@@ -45,6 +47,15 @@ export default function LocationTable({ locations }) {
     }),
     []
   );
+
+  const sortTypes = React.useMemo(
+    () => ({
+      numeric,
+      numericArray,
+    }),
+    []
+  );
+
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -112,6 +123,7 @@ export default function LocationTable({ locations }) {
           </span>
           );
         },
+        disableSortBy: true,
       },
       {
         Header: "City",
@@ -139,6 +151,7 @@ export default function LocationTable({ locations }) {
         Cell: ({ value: [lat, lon] }) => `☝ ${lat}, ${lon}`,
         Filter: CoordinatesNearColumnFilter,
         filter: "coordinatesWithinRadius",
+        sortType: 'numericArray',
       },
       {
         Header: "Elevation",
@@ -146,6 +159,7 @@ export default function LocationTable({ locations }) {
         Cell: ({ value: elevation }) => `☝ ${elevation}`,
         Filter: NumberRangeColumnFilter,
         filter: 'between',
+        sortType: 'numeric',
       },
       {
         Header: "Time Periods",
@@ -163,6 +177,7 @@ export default function LocationTable({ locations }) {
           />
         ),
         filter: includesInArrayOfType(Number),
+        disableSortBy: true,
       },
       {
         Header: "Scenarios",
@@ -191,6 +206,7 @@ export default function LocationTable({ locations }) {
       },
       defaultColumn,
       filterTypes,
+      sortTypes,
     },
     useFilters,
     useSortBy,
@@ -236,14 +252,13 @@ export default function LocationTable({ locations }) {
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
+                  {(() => {
+                    console.log("### column", column);
+                    return null;
+                  })()}
                   {column.render('Header')}
-                  <span>
-                  {column.isSorted
-                    ? column.isSortedDesc
-                      ? ' 🔽'
-                      : ' 🔼'
-                    : ''}
-                </span>
+                  {' '}
+                  <SortIndicator {...column}/>
                 </th>
               ))}
             </tr>
