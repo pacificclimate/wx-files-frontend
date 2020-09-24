@@ -2,11 +2,13 @@ import React from 'react';
 import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
 
 import flow from 'lodash/fp/flow';
+import filter from 'lodash/fp/filter';
 import map from 'lodash/fp/map';
 import join from 'lodash/fp/join';
 import compact from 'lodash/fp/compact';
 import uniq from 'lodash/fp/uniq';
 import capitalize from 'lodash/fp/capitalize';
+import isString from 'lodash/fp/isString';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith,
@@ -72,6 +74,7 @@ export default function LocationTable({ locations }) {
           coordinates: [latitude, longitude],
 
           timePeriodDecades: flow(
+            filter({ fileType: "weather" }),
             map(({ timePeriod }) => middleDecade(timePeriod)),
             compact,
             uniq,
@@ -88,14 +91,15 @@ export default function LocationTable({ locations }) {
               const {
                 fileType, scenario, timePeriod, ensembleStatistic, variables
               } = file;
+              const tp = timePeriod  || "???";
               return {
                 ...file,
                 fileType: capitalize(fileType),
                 scenario: scenario || '???',
                 timePeriodDecade:
-                  timePeriod ? `${middleDecade(timePeriod)}s` : "???",
-                ensembleStatistic: ensembleStatistic || "???",
-                variables: variables || "???",
+                  isString(tp) ? capitalize(tp) : `${middleDecade(tp)}s`,
+                ensembleStatistic: capitalize(ensembleStatistic || "???"),
+                variables: capitalize(variables || "???"),
               }
             }
           )(files),
@@ -104,6 +108,8 @@ export default function LocationTable({ locations }) {
     ),
     []
   );
+
+  console.log("### data", data)
 
   const columns = React.useMemo(
     () => [
