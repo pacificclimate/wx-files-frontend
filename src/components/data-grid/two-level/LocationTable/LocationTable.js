@@ -109,8 +109,6 @@ export default function LocationTable({ locations }) {
     []
   );
 
-  console.log("### data", data)
-
   const columns = React.useMemo(
     () => [
       {
