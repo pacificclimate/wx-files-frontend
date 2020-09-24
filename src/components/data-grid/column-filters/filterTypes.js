@@ -22,7 +22,21 @@ export const includesIfDefined = (rows, ids, filterValue) => {
     })
   })
 }
-includesIfDefined.autoRemove = val => !val || !val.length
+includesIfDefined.autoRemove = val => !val || !val.length;
+
+
+// An includes filter for array-valued rows.
+
+export const includesInArrayOfType = type => (rows, ids, filterValue) => {
+  return rows.filter(row => {
+    return ids.some(id => {
+      const rowValue = row.values[id]
+      return rowValue.includes(type(filterValue))
+    });
+  });
+}
+
+includesInArrayOfType.autoRemove = val => !val || !val.length
 
 
 // Custom filter for coordinates within a bounding box defined in km.
