@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeFilterNumberInputOnChange} from '../../../../utils/filters';
+import ClearButton from '../../misc/ClearButton';
 
 // Custom UI for selecting a coordinates (lat, lon pair) near given coordinates.
 
@@ -22,7 +23,6 @@ export default function CoordinatesNearColumnFilter({
           marginRight: '0.5rem',
         }}
       />
-      {', '}
       <input
         value={filterValue[1] || ''}
         type="number"
@@ -46,7 +46,7 @@ export default function CoordinatesNearColumnFilter({
         }}
       />
       km
-      <button onClick={() => setFilter(undefined)}>Clear</button>
+      <ClearButton onClick={() => setFilter(undefined)} />
     </div>
   )
 }
