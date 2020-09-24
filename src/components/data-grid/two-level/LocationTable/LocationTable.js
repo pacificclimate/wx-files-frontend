@@ -27,6 +27,7 @@ import SortIndicator from '../../indicators/SortIndicator';
 import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
+import SetFilterIcon from '../../misc/SetFilterIcon';
 
 
 export default function LocationTable({ locations }) {
@@ -139,7 +140,11 @@ export default function LocationTable({ locations }) {
       {
         Header: "Coordinates",
         accessor: "coordinates",
-        Cell: ({ value: [lat, lon] }) => `☝ ${lat}, ${lon}`,
+        Cell: ({ value: [lat, lon] }) => (
+          <span>
+            <SetFilterIcon/> {lat}, {lon}
+          </span>
+        ),
         Filter: CoordinatesNearColumnFilter,
         filter: "coordinatesWithinRadius",
         sortType: 'numericArray',
@@ -147,7 +152,11 @@ export default function LocationTable({ locations }) {
       {
         Header: "Elevation",
         accessor: "elevation",
-        Cell: ({ value: elevation }) => `☝ ${elevation}`,
+        Cell: ({ value: elevation }) => (
+          <span>
+            <SetFilterIcon/>{elevation}
+          </span>
+        ),
         Filter: NumberRangeColumnFilter,
         filter: 'between',
         sortType: 'numeric',
