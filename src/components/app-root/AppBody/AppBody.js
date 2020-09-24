@@ -22,8 +22,8 @@ export default function AppBody() {
               as the secondary table.
             </p>
             <p>
-              To see the files table for any given location, click on
-              the icon in the Files column.
+              To show or hide the files table for any given location, click on
+              the button in the Files column.
             </p>
           </Note>
           <Note title="Sortable columns">
@@ -36,10 +36,10 @@ export default function AppBody() {
             All results can be filtered by column.
             Controls for filtering are in each column heading.
           </Note>
-          <Note title="Loading coordinates column filter">
-            Click on a Coordinates cell to load the filter with
-            those values. This makes it easy to search for a nearby
-            location.
+          <Note title="Loading column filters from row contents">
+            Coordinates and Elevation column filters can be loaded with from
+            the data in a cell by clicking on that cell. This makes it easy
+            to search for a location with similar values.
           </Note>
         </Notes>
         <LocationTable locations={locations}/>
