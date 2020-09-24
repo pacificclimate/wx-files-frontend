@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/cjs/Button';
 import { useFilters, useSortBy, useTable } from 'react-table';
 import { textStartsWith } from '../../column-filters/filterTypes';
 import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
@@ -60,7 +61,11 @@ export default function FileTable({ data }) {
         Header: "Download",
         accessor: "contentUri",
         disableFilters: true,
-        Cell: ({ value }) => (<a href={"#"}>Download ({value})</a>),
+        Cell: ({ value }) => (
+          <Button href={value} size='sm' variant='outline-primary'>
+            Download
+          </Button>
+        ),
         disableSortBy: true,
       },
     ],
