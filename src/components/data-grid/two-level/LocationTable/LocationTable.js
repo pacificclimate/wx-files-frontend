@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
+import Button from 'react-bootstrap/Button';
 
 import flow from 'lodash/fp/flow';
 import map from 'lodash/fp/map';
@@ -25,6 +26,12 @@ import FileTable from '../FileTable';
 import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
+
+
+const [filesExpandedIndicator, filesCollapsedIndicator] =
+  ['Hide', 'Show'].map(
+    v => <Button size='sm' variant='outline-primary'>{v}</Button>
+  );
 
 
 export default function LocationTable({ locations }) {
@@ -98,11 +105,13 @@ export default function LocationTable({ locations }) {
       {
         Header: "Files",
         id: "expander",
-        Cell: ({ row }) => (
-          <span {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
+        Cell: ({ row }) => {
+          return (
+            <span {...row.getToggleRowExpandedProps()}>
+            {row.isExpanded ? filesExpandedIndicator : filesCollapsedIndicator}
           </span>
-        ),
+          );
+        },
       },
       {
         Header: "City",
