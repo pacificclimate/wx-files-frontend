@@ -5,6 +5,7 @@ import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
 import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 
 import styles from './FileTable.module.css';
+import SortIndicator from '../../indicators/SortIndicator';
 
 
 export default function FileTable({ data }) {
@@ -60,7 +61,8 @@ export default function FileTable({ data }) {
         Header: "Download",
         accessor: "contentUri",
         disableFilters: true,
-        Cell: ({ value }) => (<a href={"#"}>Download ({value})</a>)
+        Cell: ({ value }) => (<a href={"#"}>Download ({value})</a>),
+        disableSortBy: true,
       },
     ],
     []
@@ -92,13 +94,8 @@ export default function FileTable({ data }) {
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
                   {column.render('Header')}
-                  <span>
-                  {column.isSorted
-                    ? column.isSortedDesc
-                      ? ' 🔽'
-                      : ' 🔼'
-                    : ''}
-                </span>
+                  {' '}
+                  <SortIndicator {...column}/>
                 </th>
               ))}
             </tr>
