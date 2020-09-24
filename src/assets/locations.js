@@ -31,6 +31,10 @@ function makeSummaryFile() {
   return {
     ...makeFileCommon(),
     fileType: "summary",
+    scenario: "RCP8.5",
+    ensembleStatistic: "multiple",
+    timePeriod: "all",
+    variables: "all thermodynamic",
   };
 }
 
