@@ -27,13 +27,7 @@ import SortIndicator from '../../indicators/SortIndicator';
 import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
-
-
-// TODO: make this a component like SortIndicator
-const [filesExpandedIndicator, filesCollapsedIndicator] =
-  ['Hide', 'Show'].map(
-    v => <Button size='sm' variant='outline-primary'>{v}</Button>
-  );
+import ExpandIndicator from '../../indicators/ExpandIndicator';
 
 
 export default function LocationTable({ locations }) {
@@ -119,7 +113,7 @@ export default function LocationTable({ locations }) {
         Cell: ({ row }) => {
           return (
             <span {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? filesExpandedIndicator : filesCollapsedIndicator}
+            <ExpandIndicator {...row} />
           </span>
           );
         },
