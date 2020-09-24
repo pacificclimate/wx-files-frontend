@@ -1,20 +1,24 @@
 import React from 'react';
 
-// Custom filter UI for selecting a unique option from a list
+// Custom filter UI for selecting a unique option from a list that contains
+// an array of option values. (Typically this array coalesces information about
+// a list of sub-objects associated with the row.)
 
 export default function SelectArrayColumnFilter({
   column: { filterValue, setFilter, preFilteredRows, id },
   toString = option => option.toString(),
 }) {
-  // Calculate the options for filtering using the preFilteredRows
+  // Calculate the options for filtering using the preFilteredRows.
+  // The row values themselves are arrays, and each array element is added
+  // to the list of options.
   const options = React.useMemo(() => {
     const options = new Set();
     preFilteredRows.forEach(row => {
-      // console.log('### row values', row.values[id])
-      // options.add(row.values[id])
-      row.values[id].forEach(value => options.add(value))
-    })
-    return [...options.values()]
+      row.values[id].forEach(value => {
+        options.add(value);
+      });
+    });
+    return [...options.values()];
   }, [id, preFilteredRows])
 
   // Render a multi-select box
@@ -32,7 +36,7 @@ export default function SelectArrayColumnFilter({
         </option>
       ))}
     </select>
-  )
+  );
 }
 
 

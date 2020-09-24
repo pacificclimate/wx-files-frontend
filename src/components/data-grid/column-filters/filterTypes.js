@@ -25,7 +25,7 @@ export const includesIfDefined = (rows, ids, filterValue) => {
 includesIfDefined.autoRemove = val => !val || !val.length;
 
 
-// An includes filter for array-valued rows.
+// An includes filter for array-valued rows; array elements of single type.
 
 export const includesInArrayOfType = type => (rows, ids, filterValue) => {
   return rows.filter(row => {
