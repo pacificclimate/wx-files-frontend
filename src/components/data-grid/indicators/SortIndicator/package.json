@@ -1,0 +1,6 @@
+{
+  "name": "SortIndicator",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./SortIndicator.js"
+}

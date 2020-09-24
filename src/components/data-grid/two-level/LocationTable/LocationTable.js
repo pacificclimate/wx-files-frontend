@@ -11,8 +11,8 @@ import capitalize from 'lodash/fp/capitalize';
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith,
   includesIfDefined, includesInArrayOfType,
-
 } from '../../column-filters/filterTypes';
+import { numeric, numericArray } from '../../sortTypes';
 import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
 import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 import CoordinatesNearColumnFilter
@@ -22,9 +22,12 @@ import NumberRangeColumnFilter from
 import SelectArrayColumnFilter
   from '../../column-filters/SelectArrayColumnFilter';
 import FileTable from '../FileTable';
+import ExpandIndicator from '../../indicators/ExpandIndicator';
+import SortIndicator from '../../indicators/SortIndicator';
 import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
+import SetFilterIcon from '../../misc/SetFilterIcon';
 
 
 export default function LocationTable({ locations }) {
@@ -38,6 +41,15 @@ export default function LocationTable({ locations }) {
     }),
     []
   );
+
+  const sortTypes = React.useMemo(
+    () => ({
+      numeric,
+      numericArray,
+    }),
+    []
+  );
+
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -100,9 +112,10 @@ export default function LocationTable({ locations }) {
         id: "expander",
         Cell: ({ row }) => (
           <span {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
+            <ExpandIndicator {...row} />
           </span>
         ),
+        disableSortBy: true,
       },
       {
         Header: "City",
@@ -127,16 +140,26 @@ export default function LocationTable({ locations }) {
       {
         Header: "Coordinates",
         accessor: "coordinates",
-        Cell: ({ value: [lat, lon] }) => `☝ ${lat}, ${lon}`,
+        Cell: ({ value: [lat, lon] }) => (
+          <span>
+            <SetFilterIcon/> {lat}, {lon}
+          </span>
+        ),
         Filter: CoordinatesNearColumnFilter,
         filter: "coordinatesWithinRadius",
+        sortType: 'numericArray',
       },
       {
         Header: "Elevation",
         accessor: "elevation",
-        Cell: ({ value: elevation }) => `☝ ${elevation}`,
+        Cell: ({ value: elevation }) => (
+          <span>
+            <SetFilterIcon/>{elevation}
+          </span>
+        ),
         Filter: NumberRangeColumnFilter,
         filter: 'between',
+        sortType: 'numeric',
       },
       {
         Header: "Time Periods",
@@ -154,6 +177,7 @@ export default function LocationTable({ locations }) {
           />
         ),
         filter: includesInArrayOfType(Number),
+        disableSortBy: true,
       },
       {
         Header: "Scenarios",
@@ -182,6 +206,7 @@ export default function LocationTable({ locations }) {
       },
       defaultColumn,
       filterTypes,
+      sortTypes,
     },
     useFilters,
     useSortBy,
@@ -228,13 +253,8 @@ export default function LocationTable({ locations }) {
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
                   {column.render('Header')}
-                  <span>
-                  {column.isSorted
-                    ? column.isSortedDesc
-                      ? ' 🔽'
-                      : ' 🔼'
-                    : ''}
-                </span>
+                  {' '}
+                  <SortIndicator {...column}/>
                 </th>
               ))}
             </tr>

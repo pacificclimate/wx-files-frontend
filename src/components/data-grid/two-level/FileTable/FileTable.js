@@ -1,10 +1,12 @@
 import React from 'react';
+import Button from 'react-bootstrap/cjs/Button';
 import { useFilters, useSortBy, useTable } from 'react-table';
 import { textStartsWith } from '../../column-filters/filterTypes';
 import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
 import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 
 import styles from './FileTable.module.css';
+import SortIndicator from '../../indicators/SortIndicator';
 
 
 export default function FileTable({ data }) {
@@ -18,7 +20,6 @@ export default function FileTable({ data }) {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: DefaultColumnFilter,
-      // This hides all filters.
       disableFilters: true,
     }),
     []
@@ -60,7 +61,12 @@ export default function FileTable({ data }) {
         Header: "Download",
         accessor: "contentUri",
         disableFilters: true,
-        Cell: ({ value }) => (<a href={"#"}>Download ({value})</a>)
+        Cell: ({ value }) => (
+          <Button href={value} size='sm' variant='outline-primary'>
+            Download
+          </Button>
+        ),
+        disableSortBy: true,
       },
     ],
     []
@@ -92,13 +98,8 @@ export default function FileTable({ data }) {
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
                   {column.render('Header')}
-                  <span>
-                  {column.isSorted
-                    ? column.isSortedDesc
-                      ? ' 🔽'
-                      : ' 🔼'
-                    : ''}
-                </span>
+                  {' '}
+                  <SortIndicator {...column}/>
                 </th>
               ))}
             </tr>
@@ -114,7 +115,6 @@ export default function FileTable({ data }) {
         </thead>
         <tbody {...getTableBodyProps()}>
         {rows.map(row => {
-          console.log("### file row", row)
           prepareRow(row)
           return (
             <React.Fragment {...row.getRowProps()} >
