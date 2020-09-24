@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
-import Button from 'react-bootstrap/Button';
 
 import flow from 'lodash/fp/flow';
 import map from 'lodash/fp/map';
@@ -23,11 +22,11 @@ import NumberRangeColumnFilter from
 import SelectArrayColumnFilter
   from '../../column-filters/SelectArrayColumnFilter';
 import FileTable from '../FileTable';
+import ExpandIndicator from '../../indicators/ExpandIndicator';
 import SortIndicator from '../../indicators/SortIndicator';
 import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
-import ExpandIndicator from '../../indicators/ExpandIndicator';
 
 
 export default function LocationTable({ locations }) {
@@ -110,13 +109,11 @@ export default function LocationTable({ locations }) {
       {
         Header: "Files",
         id: "expander",
-        Cell: ({ row }) => {
-          return (
-            <span {...row.getToggleRowExpandedProps()}>
+        Cell: ({ row }) => (
+          <span {...row.getToggleRowExpandedProps()}>
             <ExpandIndicator {...row} />
           </span>
-          );
-        },
+        ),
         disableSortBy: true,
       },
       {
@@ -246,10 +243,6 @@ export default function LocationTable({ locations }) {
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
-                  {(() => {
-                    console.log("### column", column);
-                    return null;
-                  })()}
                   {column.render('Header')}
                   {' '}
                   <SortIndicator {...column}/>

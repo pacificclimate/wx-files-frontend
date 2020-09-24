@@ -19,7 +19,6 @@ export default function FileTable({ data }) {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: DefaultColumnFilter,
-      // This hides all filters.
       disableFilters: true,
     }),
     []
@@ -111,7 +110,6 @@ export default function FileTable({ data }) {
         </thead>
         <tbody {...getTableBodyProps()}>
         {rows.map(row => {
-          console.log("### file row", row)
           prepareRow(row)
           return (
             <React.Fragment {...row.getRowProps()} >

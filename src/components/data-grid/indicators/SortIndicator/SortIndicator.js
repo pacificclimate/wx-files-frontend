@@ -33,7 +33,6 @@ export default function SortIndicator({
   isSortedDesc = false,
   sortType = "alphanumeric",
 }) {
-  // console.log('### SortIndicator', rest)
   if (!isSorted) {
     return null;
   }
