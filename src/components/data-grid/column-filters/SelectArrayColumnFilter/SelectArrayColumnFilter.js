@@ -1,4 +1,6 @@
 import React from 'react';
+import Form from 'react-bootstrap/Form';
+import ClearButton from '../../misc/ClearButton';
 
 // Custom filter UI for selecting a unique option from a list that contains
 // an array of option values. (Typically this array coalesces information about
@@ -7,6 +9,7 @@ import React from 'react';
 export default function SelectArrayColumnFilter({
   column: { filterValue, setFilter, preFilteredRows, id },
   toString = option => option.toString(),
+  allValue = "*",
 }) {
   // Calculate the options for filtering using the preFilteredRows.
   // The row values themselves are arrays, and each array element is added
@@ -23,19 +26,24 @@ export default function SelectArrayColumnFilter({
 
   // Render a multi-select box
   return (
-    <select
-      value={filterValue}
-      onChange={e => {
-        setFilter(e.target.value || undefined)
-      }}
-    >
-      <option value="">All</option>
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {toString(option)}
-        </option>
-      ))}
-    </select>
+    <div style={{ display: 'flex' }}>
+      <Form.Control
+        as="select"
+        value={filterValue}
+        onChange={e => {
+          setFilter(e.target.value || undefined)
+        }}
+        size="sm"
+      >
+        <option value={allValue}>All</option>
+        {options.map((option, i) => (
+          <option key={i} value={option}>
+            {toString(option)}
+          </option>
+        ))}
+      </Form.Control>
+      <ClearButton setFilter={() => setFilter(allValue)} />
+    </div>
   );
 }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import Form from 'react-bootstrap/Form';
 import { makeFilterNumberInputOnChange} from '../../../../utils/filters';
 import ClearButton from '../../misc/ClearButton';
 
@@ -8,12 +9,8 @@ export default function CoordinatesNearColumnFilter({
   column: { filterValue = [], preFilteredRows, setFilter, id },
 }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-      }}
-    >
-      <input
+    <div style={{ display: 'flex' }}>
+      <Form.Control
         value={filterValue[0] || ''}
         type="number"
         onChange={makeFilterNumberInputOnChange(setFilter, 0)}
@@ -22,19 +19,21 @@ export default function CoordinatesNearColumnFilter({
           width: '70px',
           marginRight: '0.5rem',
         }}
+        size="sm"
       />
-      <input
+      <Form.Control
         value={filterValue[1] || ''}
         type="number"
         onChange={makeFilterNumberInputOnChange(setFilter, 1)}
         placeholder={`Lon`}
         style={{
           width: '70px',
-          marginLeft: '0.5rem',
+          marginRight: '0.5rem',
         }}
+        size="sm"
       />
-      +/-
-      <input
+      ±
+      <Form.Control
         value={filterValue[2] || ''}
         type="number"
         step={5}
@@ -43,15 +42,12 @@ export default function CoordinatesNearColumnFilter({
         style={{
           width: '70px',
           marginLeft: '0.5rem',
+          marginRight: '0.5rem',
         }}
+        size="sm"
       />
       km
-      <ClearButton
-        onClick={e => {
-          e.stopPropagation();
-          setFilter(undefined);
-        }}
-      />
+      <ClearButton setFilter={setFilter} />
     </div>
   )
 }
