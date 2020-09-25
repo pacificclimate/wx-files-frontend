@@ -2,8 +2,6 @@ import React from 'react';
 import Button from 'react-bootstrap/cjs/Button';
 import { useFilters, useSortBy, useTable } from 'react-table';
 import { textStartsWith } from '../../column-filters/filterTypes';
-import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
-import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 
 import styles from './FileTable.module.css';
 import SortIndicator from '../../indicators/SortIndicator';
@@ -19,7 +17,6 @@ export default function FileTable({ data }) {
 
   const defaultColumn = React.useMemo(
     () => ({
-      Filter: DefaultColumnFilter,
       disableFilters: true,
     }),
     []
@@ -30,32 +27,22 @@ export default function FileTable({ data }) {
       {
         Header: "Type",
         accessor: "fileType",
-        Filter: SelectColumnFilter,
-        filter: 'includes',
       },
       {
         Header: "Scenario",
         accessor: "scenario",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
       },
       {
         Header: "Time Period",
         accessor: "timePeriodDecade",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
       },
       {
         Header: "Ensemble Statistic",
         accessor: "ensembleStatistic",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
       },
       {
         Header: "Variables",
         accessor: "variables",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
       },
       {
         Header: "Download",
