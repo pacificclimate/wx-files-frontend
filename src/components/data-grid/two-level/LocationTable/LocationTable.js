@@ -33,6 +33,8 @@ import SetFilterIcon from '../../misc/SetFilterIcon';
 
 
 export default function LocationTable({ locations }) {
+  // TODO: Extract the functions that are memoized to a different place.
+  //  Several will be common to both tables.
   const filterTypes = React.useMemo(
     () => ({
       textStartsWith,
@@ -250,26 +252,18 @@ export default function LocationTable({ locations }) {
       >
         <thead>
         {headerGroups.map(headerGroup => (
-          <>
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  {column.render('Header')}
-                  {' '}
-                  <SortIndicator {...column}/>
-                </th>
-              ))}
-            </tr>
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>
-                  <div>{column.canFilter ? column.render('Filter') : null}</div>
-                </th>
-              ))}
-            </tr>
-          </>
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th
+                {...column.getHeaderProps(column.getSortByToggleProps())}
+              >
+                {column.render('Header')}
+                {' '}
+                <SortIndicator {...column}/>
+                <div>{column.canFilter ? column.render('Filter') : null}</div>
+              </th>
+            ))}
+          </tr>
         ))}
         </thead>
         <tbody {...getTableBodyProps()}>
