@@ -9,15 +9,16 @@ export default function ClearButton({
   ...restProps
 }) {
   return (
-    <div title={title}>
-      <XCircle
-        className={styles.ClearButton}
-        onClick={e => {
-          e.stopPropagation();
-          setFilter(undefined);
-        }}
-        {...restProps}
-      />
-    </div>
+    <span
+      title={title}
+      className={styles.ClearButton}
+      onClick={e => {
+        e.stopPropagation();
+        setFilter(undefined);
+      }}
+      {...restProps}
+    >
+      <XCircle/>
+    </span>
   );
 }
