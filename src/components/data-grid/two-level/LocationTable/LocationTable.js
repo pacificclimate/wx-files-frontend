@@ -114,7 +114,11 @@ export default function LocationTable({ locations }) {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Files",
+        Header: (
+          <span title="Show or hide files available for a location">
+            Files
+          </span>
+        ),
         id: "expander",
         Cell: ({ row }) => (
           <span {...row.getToggleRowExpandedProps()}>
@@ -256,11 +260,24 @@ export default function LocationTable({ locations }) {
             {headerGroup.headers.map(column => (
               <th
                 {...column.getHeaderProps(column.getSortByToggleProps())}
+                title={""}
               >
-                {column.render('Header')}
-                {' '}
-                <SortIndicator {...column}/>
-                <div>{column.canFilter ? column.render('Filter') : null}</div>
+                <div
+                  title={column.canSort ? "Click to change column sorting" : ""}
+                >
+                  {column.render('Header')}
+                  {' '}
+                  {column.canSort && <SortIndicator {...column}/>}
+                </div>
+                {
+                  column.canFilter &&
+                  <div
+                    title="Filter rows"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    {column.render('Filter')}
+                  </div>
+                }
               </th>
             ))}
           </tr>
