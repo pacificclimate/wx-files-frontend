@@ -12,7 +12,7 @@ import isString from 'lodash/fp/isString';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith,
-  includesIfDefined, includesInArrayOfType,
+  includesIfDefined, includesInArrayOfType, exactOrAll,
 } from '../../column-filters/filterTypes';
 import { numeric, numericArray } from '../../sortTypes';
 import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
@@ -137,8 +137,13 @@ export default function LocationTable({ locations }) {
       {
         Header: "Province",
         accessor: "province",
-        Filter: SelectColumnFilter,
-        filter: 'includes',
+        Filter: ({ column }) => (
+          <SelectColumnFilter
+            column={column}
+            allValue={"*"}
+          />
+        ),
+        filter: exactOrAll("*"),
       },
       {
         Header: "Code",
@@ -184,9 +189,10 @@ export default function LocationTable({ locations }) {
           <SelectArrayColumnFilter
             toString={option => `${option}s`}
             column={column}
+            allValue={"*"}
           />
         ),
-        filter: includesInArrayOfType(Number),
+        filter: includesInArrayOfType(Number, "*"),
         disableSortBy: true,
       },
       {
