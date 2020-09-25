@@ -33,6 +33,8 @@ import SetFilterIcon from '../../misc/SetFilterIcon';
 
 
 export default function LocationTable({ locations }) {
+  // TODO: Extract the functions that are memoized to a different place.
+  //  Several will be common to both tables.
   const filterTypes = React.useMemo(
     () => ({
       textStartsWith,
@@ -250,34 +252,27 @@ export default function LocationTable({ locations }) {
       >
         <thead>
         {headerGroups.map(headerGroup => (
-          <>
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  {column.render('Header')}
-                  {' '}
-                  <SortIndicator {...column}/>
-                </th>
-              ))}
-            </tr>
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>
-                  <div>{column.canFilter ? column.render('Filter') : null}</div>
-                </th>
-              ))}
-            </tr>
-          </>
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th
+                {...column.getHeaderProps(column.getSortByToggleProps())}
+              >
+                {column.render('Header')}
+                {' '}
+                <SortIndicator {...column}/>
+                <div>{column.canFilter ? column.render('Filter') : null}</div>
+              </th>
+            ))}
+          </tr>
         ))}
         </thead>
         <tbody {...getTableBodyProps()}>
         {rows.map(row => {
           prepareRow(row)
+          const { key, ...restRowProps } = row.getRowProps();
           return (
-            <React.Fragment {...row.getRowProps()} >
-              <tr>
+            <React.Fragment key={key}>
+              <tr {...restRowProps} key={'location'}>
                 {row.cells.map(cell => {
                   return (
                     <td
@@ -290,7 +285,7 @@ export default function LocationTable({ locations }) {
                 })}
               </tr>
               {row.isExpanded ? (
-                  <tr className={styles.expander}>
+                  <tr className={styles.expander} key={'files'}>
                     <td>&nbsp;</td>
                     <td colSpan={visibleColumns.length-1}>
                       <FileTable data={row.original.filesData}/>

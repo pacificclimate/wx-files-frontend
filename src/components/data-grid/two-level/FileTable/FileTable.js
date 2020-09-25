@@ -91,45 +91,35 @@ export default function FileTable({ data }) {
       >
         <thead>
         {headerGroups.map(headerGroup => (
-          <>
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  {column.render('Header')}
-                  {' '}
-                  <SortIndicator {...column}/>
-                </th>
-              ))}
-            </tr>
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>
-                  <div>{column.canFilter ? column.render('Filter') : null}</div>
-                </th>
-              ))}
-            </tr>
-          </>
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th
+                {...column.getHeaderProps(column.getSortByToggleProps())}
+              >
+                {column.render('Header')}
+                {' '}
+                <SortIndicator {...column}/>
+                <div>{column.canFilter ? column.render('Filter') : null}</div>
+              </th>
+            ))}
+          </tr>
         ))}
         </thead>
         <tbody {...getTableBodyProps()}>
         {rows.map(row => {
           prepareRow(row)
           return (
-            <React.Fragment {...row.getRowProps()} >
-              <tr>
-                {row.cells.map(cell => {
-                  return (
-                    <td
-                      {...cell.getCellProps()}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  )
-                })}
-              </tr>
-            </React.Fragment>
+            <tr {...row.getRowProps()}>
+              {row.cells.map(cell => {
+                return (
+                  <td
+                    {...cell.getCellProps()}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                )
+              })}
+            </tr>
           )
         })}
         </tbody>

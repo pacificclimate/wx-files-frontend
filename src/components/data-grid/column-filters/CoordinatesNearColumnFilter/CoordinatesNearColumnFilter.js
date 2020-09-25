@@ -46,7 +46,12 @@ export default function CoordinatesNearColumnFilter({
         }}
       />
       km
-      <ClearButton onClick={() => setFilter(undefined)} />
+      <ClearButton
+        onClick={e => {
+          e.stopPropagation();
+          setFilter(undefined);
+        }}
+      />
     </div>
   )
 }
