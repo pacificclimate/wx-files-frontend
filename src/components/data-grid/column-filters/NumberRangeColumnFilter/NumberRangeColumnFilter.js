@@ -35,7 +35,12 @@ export default function NumberRangeColumnFilter({
         }}
 
       />
-      <ClearButton onClick={() => setFilter(undefined)}/>
+      <ClearButton
+        onClick={e => {
+          e.stopPropagation();
+          setFilter(undefined);
+        }}
+      />
     </div>
   );
 }
