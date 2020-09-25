@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import ClearButton from '../../misc/ClearButton';
+import styles from '../ColumnFilters.module.css';
 
 // Custom filter UI for selecting a unique option from a list
 
@@ -19,7 +20,7 @@ export default function SelectColumnFilter({
 
   // Render a multi-select box
   return (
-    <div style={{ display: 'flex' }}>
+    <div className={`${styles.wrapper} ${styles.selectColumn}`}>
       <Form.Control
         as="select"
         value={filterValue}

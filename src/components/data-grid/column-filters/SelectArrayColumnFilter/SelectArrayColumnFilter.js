@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import ClearButton from '../../misc/ClearButton';
+import styles from '../ColumnFilters.module.css';
 
 // Custom filter UI for selecting a unique option from a list that contains
 // an array of option values. (Typically this array coalesces information about
@@ -26,14 +27,14 @@ export default function SelectArrayColumnFilter({
 
   // Render a multi-select box
   return (
-    <div style={{ display: 'flex' }}>
+    <div className={`${styles.wrapper} ${styles.selectArrayColumn}`}>
       <Form.Control
+        size="sm"
         as="select"
         value={filterValue}
         onChange={e => {
           setFilter(e.target.value || undefined)
         }}
-        size="sm"
       >
         <option value={allValue}>All</option>
         {options.map((option, i) => (
