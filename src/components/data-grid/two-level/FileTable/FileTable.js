@@ -109,19 +109,17 @@ export default function FileTable({ data }) {
         {rows.map(row => {
           prepareRow(row)
           return (
-            <React.Fragment {...row.getRowProps()} >
-              <tr>
-                {row.cells.map(cell => {
-                  return (
-                    <td
-                      {...cell.getCellProps()}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  )
-                })}
-              </tr>
-            </React.Fragment>
+            <tr {...row.getRowProps()}>
+              {row.cells.map(cell => {
+                return (
+                  <td
+                    {...cell.getCellProps()}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                )
+              })}
+            </tr>
           )
         })}
         </tbody>
