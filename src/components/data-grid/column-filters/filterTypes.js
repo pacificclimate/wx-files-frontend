@@ -26,8 +26,13 @@ includesIfDefined.autoRemove = val => !val || !val.length;
 
 
 // An includes filter for array-valued rows; array elements of single type.
+// Matches any row whose array contains the filter value, or
+// passes all rows for specified "all" value.
 
-export const includesInArrayOfType = type => (rows, ids, filterValue) => {
+export const includesInArrayOfType = (type, all) => (rows, ids, filterValue) => {
+  if (filterValue === all) {
+    return rows;
+  }
   return rows.filter(row => {
     return ids.some(id => {
       const rowValue = row.values[id]
@@ -37,6 +42,25 @@ export const includesInArrayOfType = type => (rows, ids, filterValue) => {
 }
 
 includesInArrayOfType.autoRemove = val => !val || !val.length
+
+
+// Custom filter that matches exactly or passes all rows with specified "all"
+// value.
+
+export const exactOrAll = all => (rows, ids, filterValue) => {
+  if (filterValue === all) {
+    return rows;
+  }
+  return rows.filter(row => {
+    return ids.some(id => {
+      const rowValue = row.values[id];
+      return rowValue === filterValue;
+    });
+  });
+}
+
+exactOrAll.autoRemove = val => typeof val === 'undefined'
+
 
 
 // Custom filter for coordinates within a bounding box defined in km.

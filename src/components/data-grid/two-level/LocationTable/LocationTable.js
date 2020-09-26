@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
+import Table from 'react-bootstrap/Table';
 
 import flow from 'lodash/fp/flow';
 import filter from 'lodash/fp/filter';
@@ -12,7 +13,7 @@ import isString from 'lodash/fp/isString';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith,
-  includesIfDefined, includesInArrayOfType,
+  includesIfDefined, includesInArrayOfType, exactOrAll,
 } from '../../column-filters/filterTypes';
 import { numeric, numericArray } from '../../sortTypes';
 import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
@@ -114,7 +115,11 @@ export default function LocationTable({ locations }) {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Files",
+        Header: (
+          <span title="Show or hide files available for a location">
+            Files
+          </span>
+        ),
         id: "expander",
         Cell: ({ row }) => (
           <span {...row.getToggleRowExpandedProps()}>
@@ -133,8 +138,13 @@ export default function LocationTable({ locations }) {
       {
         Header: "Province",
         accessor: "province",
-        Filter: SelectColumnFilter,
-        filter: 'includes',
+        Filter: ({ column }) => (
+          <SelectColumnFilter
+            column={column}
+            allValue={"*"}
+          />
+        ),
+        filter: exactOrAll("*"),
       },
       {
         Header: "Code",
@@ -180,9 +190,10 @@ export default function LocationTable({ locations }) {
           <SelectArrayColumnFilter
             toString={option => `${option}s`}
             column={column}
+            allValue={"*"}
           />
         ),
-        filter: includesInArrayOfType(Number),
+        filter: includesInArrayOfType(Number, "*"),
         disableSortBy: true,
       },
       {
@@ -247,7 +258,8 @@ export default function LocationTable({ locations }) {
 
   return (
     <div className={styles.LocationTable}>
-      <table
+      <Table
+        className={"rounded"}
         {...getTableProps()}
       >
         <thead>
@@ -256,11 +268,24 @@ export default function LocationTable({ locations }) {
             {headerGroup.headers.map(column => (
               <th
                 {...column.getHeaderProps(column.getSortByToggleProps())}
+                title={""}
               >
-                {column.render('Header')}
-                {' '}
-                <SortIndicator {...column}/>
-                <div>{column.canFilter ? column.render('Filter') : null}</div>
+                <div
+                  title={column.canSort ? "Click to change column sorting" : ""}
+                >
+                  {column.render('Header')}
+                  {' '}
+                  {column.canSort && <SortIndicator {...column}/>}
+                </div>
+                {
+                  column.canFilter &&
+                  <div
+                    title="Filter rows"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    {column.render('Filter')}
+                  </div>
+                }
               </th>
             ))}
           </tr>
@@ -296,7 +321,7 @@ export default function LocationTable({ locations }) {
           )
         })}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 }

@@ -1,9 +1,8 @@
 import React from 'react';
-import Button from 'react-bootstrap/cjs/Button';
+import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 import { useFilters, useSortBy, useTable } from 'react-table';
 import { textStartsWith } from '../../column-filters/filterTypes';
-import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
-import SelectColumnFilter from '../../column-filters/SelectColumnFilter';
 
 import styles from './FileTable.module.css';
 import SortIndicator from '../../indicators/SortIndicator';
@@ -19,7 +18,6 @@ export default function FileTable({ data }) {
 
   const defaultColumn = React.useMemo(
     () => ({
-      Filter: DefaultColumnFilter,
       disableFilters: true,
     }),
     []
@@ -30,32 +28,22 @@ export default function FileTable({ data }) {
       {
         Header: "Type",
         accessor: "fileType",
-        Filter: SelectColumnFilter,
-        filter: 'includes',
       },
       {
         Header: "Scenario",
         accessor: "scenario",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
       },
       {
         Header: "Time Period",
         accessor: "timePeriodDecade",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
       },
       {
         Header: "Ensemble Statistic",
         accessor: "ensembleStatistic",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
       },
       {
         Header: "Variables",
         accessor: "variables",
-        Filter: SelectColumnFilter,
-        filter: 'includesIfDefined',
       },
       {
         Header: "Download",
@@ -86,7 +74,7 @@ export default function FileTable({ data }) {
 
   return (
     <div className={styles.FileTable}>
-      <table
+      <Table
         {...getTableProps()}
       >
         <thead>
@@ -95,11 +83,24 @@ export default function FileTable({ data }) {
             {headerGroup.headers.map(column => (
               <th
                 {...column.getHeaderProps(column.getSortByToggleProps())}
+                title={""}
               >
-                {column.render('Header')}
-                {' '}
-                <SortIndicator {...column}/>
-                <div>{column.canFilter ? column.render('Filter') : null}</div>
+                <div
+                  title={column.canSort ? "Click to change column sorting" : ""}
+                >
+                  {column.render('Header')}
+                  {' '}
+                  {column.canSort && <SortIndicator {...column}/>}
+                </div>
+                {
+                  column.canFilter &&
+                  <div
+                    title="Filter rows"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    {column.render('Filter')}
+                  </div>
+                }
               </th>
             ))}
           </tr>
@@ -123,7 +124,7 @@ export default function FileTable({ data }) {
           )
         })}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 }

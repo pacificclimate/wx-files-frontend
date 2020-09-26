@@ -1,6 +1,8 @@
 import React from 'react';
+import Form from 'react-bootstrap/Form';
 import { makeFilterNumberInputOnChange } from '../../../../utils/filters';
 import ClearButton from '../../misc/ClearButton';
+import styles from '../ColumnFilters.module.css';
 
 // Custom filter UI for selecting number within a range (min, max).
 
@@ -8,12 +10,8 @@ export default function NumberRangeColumnFilter({
  column: { filterValue = [], setFilter, id },
 }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-      }}
-    >
-      <input
+    <div className={`${styles.wrapper} ${styles.numberRange}`}>
+      <Form.Control
         value={filterValue[0] || ''}
         type="number"
         onChange={makeFilterNumberInputOnChange(setFilter, 0)}
@@ -22,9 +20,10 @@ export default function NumberRangeColumnFilter({
           width: '70px',
           marginRight: '0.5rem',
         }}
+        size="sm"
       />
       to
-      <input
+      <Form.Control
         value={filterValue[1] || ''}
         type="number"
         onChange={makeFilterNumberInputOnChange(setFilter, 1)}
@@ -33,14 +32,9 @@ export default function NumberRangeColumnFilter({
           width: '70px',
           marginLeft: '0.5rem',
         }}
-
+        size="sm"
       />
-      <ClearButton
-        onClick={e => {
-          e.stopPropagation();
-          setFilter(undefined);
-        }}
-      />
+      <ClearButton setFilter={setFilter} />
     </div>
   );
 }
