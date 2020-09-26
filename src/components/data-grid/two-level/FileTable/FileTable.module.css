@@ -9,7 +9,8 @@ using !important".
 
 .FileTable.FileTable table {
     border: none;
-    /*background: aliceblue;*/
+    width: auto;
+    margin-bottom: 0;
 }
 
 .FileTable.FileTable th {

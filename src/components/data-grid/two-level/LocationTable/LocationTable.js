@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
+import Table from 'react-bootstrap/Table';
 
 import flow from 'lodash/fp/flow';
 import filter from 'lodash/fp/filter';
@@ -257,7 +258,8 @@ export default function LocationTable({ locations }) {
 
   return (
     <div className={styles.LocationTable}>
-      <table
+      <Table
+        className={"rounded"}
         {...getTableProps()}
       >
         <thead>
@@ -319,7 +321,7 @@ export default function LocationTable({ locations }) {
           )
         })}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 }

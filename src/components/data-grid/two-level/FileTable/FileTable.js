@@ -1,5 +1,6 @@
 import React from 'react';
-import Button from 'react-bootstrap/cjs/Button';
+import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 import { useFilters, useSortBy, useTable } from 'react-table';
 import { textStartsWith } from '../../column-filters/filterTypes';
 
@@ -73,7 +74,7 @@ export default function FileTable({ data }) {
 
   return (
     <div className={styles.FileTable}>
-      <table
+      <Table
         {...getTableProps()}
       >
         <thead>
@@ -123,7 +124,7 @@ export default function FileTable({ data }) {
           )
         })}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 }
