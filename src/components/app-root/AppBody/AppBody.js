@@ -5,8 +5,6 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 
-import tap from 'lodash/fp/tap';
-
 import { fetchWxFilesMetadata }
   from '../../../data-services/wx-files-data-service';
 import LocationTable from '../../data-grid/two-level/LocationTable';
@@ -16,15 +14,11 @@ import ClearButton from '../../data-grid/misc/ClearButton';
 
 
 export default function AppBody() {
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState(null);
 
   useEffect(() => {
-    fetchWxFilesMetadata()
-      .then(locations => setLocations(locations));
-    }
-  );
-
-  console.log("AppBody: locations", locations)
+    fetchWxFilesMetadata().then(setLocations);
+  });
 
   return (
     <>
