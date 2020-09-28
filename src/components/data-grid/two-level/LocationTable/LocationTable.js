@@ -109,7 +109,7 @@ export default function LocationTable({ locations }) {
         })
       }
     ),
-    []
+    [locations]
   );
 
   const columns = React.useMemo(
