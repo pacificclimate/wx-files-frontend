@@ -4,8 +4,8 @@ export const middleDecade = timePeriod => {
   if (!timePeriod) {
     return null;
   }
-  const startYear = timePeriod.start.getFullYear();
-  const endYear = timePeriod.end.getFullYear();
+  const startYear = timePeriod.start.year();
+  const endYear = timePeriod.end.year();
   return Math.floor((startYear + endYear) / 20) * 10;
 }
 
