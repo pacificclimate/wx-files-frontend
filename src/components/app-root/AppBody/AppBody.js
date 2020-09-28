@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 
-import locations from '../../../assets/locations';
+import tap from 'lodash/fp/tap';
+
+import { fetchWxFilesMetadata }
+  from '../../../data-services/wx-files-data-service';
 import LocationTable from '../../data-grid/two-level/LocationTable';
 import Notes from '../../notes/Notes';
 import Note from '../../notes/Note';
@@ -13,6 +16,16 @@ import ClearButton from '../../data-grid/misc/ClearButton';
 
 
 export default function AppBody() {
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    fetchWxFilesMetadata()
+      .then(locations => setLocations(locations));
+    }
+  );
+
+  console.log("AppBody: locations", locations)
+
   return (
     <>
       <Row>
