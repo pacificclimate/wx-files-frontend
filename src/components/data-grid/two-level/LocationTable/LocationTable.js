@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
 import Table from 'react-bootstrap/Table';
+import Loader from 'react-loader';
 
 import flow from 'lodash/fp/flow';
 import filter from 'lodash/fp/filter';
@@ -68,7 +69,7 @@ export default function LocationTable({ locations }) {
   // Map raw locations data into the form consumed by the data grid.
   // This value and `columns` are closely allied.
   const data = React.useMemo(
-    () => locations.map(
+    () => (locations || []).map(
       location => {
         const { latitude, longitude, files } = location;
         return ({
@@ -109,7 +110,7 @@ export default function LocationTable({ locations }) {
         })
       }
     ),
-    []
+    [locations]
   );
 
   const columns = React.useMemo(
@@ -254,6 +255,10 @@ export default function LocationTable({ locations }) {
       default:
         break;
     }
+  }
+
+  if (locations === null) {
+    return <Loader />;
   }
 
   return (
