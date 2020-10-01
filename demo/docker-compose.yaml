@@ -1,0 +1,14 @@
+version: '2.3'
+services:
+  backend:
+    image: pcic/wx-files-frontend:latest
+    container_name: "wx-files-frontend"
+    ports:
+      - "30530:8080"
+    env_file:
+      - wx-files-frontend.env
+
+networks:
+  default:
+    external:
+      name: pcicbr0
