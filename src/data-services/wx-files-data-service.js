@@ -34,3 +34,8 @@ export function fetchWxFilesMetadata() {
     .then(normalizeLocationsData)
     ;
 }
+
+
+export function fileContentUri(endpoint) {
+  return urljoin(process.env.REACT_APP_WXFS_URL, endpoint)
+}

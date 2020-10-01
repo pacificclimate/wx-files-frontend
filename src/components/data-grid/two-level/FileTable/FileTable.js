@@ -6,6 +6,7 @@ import { textStartsWith } from '../../column-filters/filterTypes';
 
 import styles from './FileTable.module.css';
 import SortIndicator from '../../indicators/SortIndicator';
+import { fileContentUri } from '../../../../data-services/wx-files-data-service';
 
 
 export default function FileTable({ data }) {
@@ -50,7 +51,11 @@ export default function FileTable({ data }) {
         accessor: "contentUri",
         disableFilters: true,
         Cell: ({ value }) => (
-          <Button href={value} size='sm' variant='outline-primary'>
+          <Button
+            href={fileContentUri(value)}
+            size='sm'
+            variant='outline-primary'
+          >
             Download
           </Button>
         ),
