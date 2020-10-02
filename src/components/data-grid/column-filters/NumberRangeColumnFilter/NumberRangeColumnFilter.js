@@ -7,14 +7,17 @@ import styles from '../ColumnFilters.module.css';
 // Custom filter UI for selecting number within a range (min, max).
 
 export default function NumberRangeColumnFilter({
- column: { filterValue = [], setFilter, id },
+ column: {
+   filterValue = [undefined, undefined],
+   setFilter,
+ },
 }) {
   return (
     <div className={`${styles.wrapper} ${styles.numberRange}`}>
       <Form.Control
         value={filterValue[0] || ''}
         type="number"
-        onChange={makeFilterNumberInputOnChange(setFilter, 0)}
+        onChange={makeFilterNumberInputOnChange({ filterValue, setFilter }, 0)}
         placeholder={'Min'}
         style={{
           width: '70px',
@@ -26,7 +29,7 @@ export default function NumberRangeColumnFilter({
       <Form.Control
         value={filterValue[1] || ''}
         type="number"
-        onChange={makeFilterNumberInputOnChange(setFilter, 1)}
+        onChange={makeFilterNumberInputOnChange({ filterValue, setFilter }, 1)}
         placeholder={'Max'}
         style={{
           width: '70px',

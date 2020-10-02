@@ -7,7 +7,10 @@ import styles from '../ColumnFilters.module.css';
 // Custom UI for selecting a coordinates (lat, lon pair) near given coordinates.
 
 export default function CoordinatesNearColumnFilter({
-  column: { filterValue = [], preFilteredRows, setFilter, id },
+  column: {
+    filterValue = [undefined, undefined, undefined],
+    setFilter,
+  },
 }) {
   return (
     <div className={`${styles.wrapper} ${styles.coordinates}`}>
@@ -16,7 +19,7 @@ export default function CoordinatesNearColumnFilter({
         size="sm"
         htmlSize={6}
         value={filterValue[0] || ''}
-        onChange={makeFilterNumberInputOnChange(setFilter, 0)}
+        onChange={makeFilterNumberInputOnChange({ filterValue, setFilter }, 0)}
         placeholder={`Lat`}
       />
       <Form.Control
@@ -24,7 +27,7 @@ export default function CoordinatesNearColumnFilter({
         size="sm"
         htmlSize={6}
         value={filterValue[1] || ''}
-        onChange={makeFilterNumberInputOnChange(setFilter, 1)}
+        onChange={makeFilterNumberInputOnChange({ filterValue, setFilter }, 1)}
         placeholder={`Lon`}
       />
       ±
@@ -35,7 +38,7 @@ export default function CoordinatesNearColumnFilter({
         value={filterValue[2] || ''}
         type="number"
         step={5}
-        onChange={makeFilterNumberInputOnChange(setFilter, 2)}
+        onChange={makeFilterNumberInputOnChange({ filterValue, setFilter }, 2)}
         placeholder={`km`}
         style={{
           marginLeft: '0.5em',
