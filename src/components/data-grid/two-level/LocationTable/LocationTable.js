@@ -1,5 +1,7 @@
 import React from 'react';
-import { useTable, useFilters, useSortBy, useExpanded } from 'react-table';
+import {
+  useTable, useFilters, useSortBy, useExpanded, usePagination
+} from 'react-table';
 import Table from 'react-bootstrap/Table';
 import Loader from 'react-loader';
 
@@ -32,6 +34,7 @@ import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
 import SetFilterIcon from '../../misc/SetFilterIcon';
+import PaginationControls from '../../misc/PaginationControls';
 
 
 export default function LocationTable({ locations }) {
@@ -208,13 +211,34 @@ export default function LocationTable({ locations }) {
   );
 
   const {
+    // Basic table functionality
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
-    setFilter,
     visibleColumns,
+
+    // Filtering functionality
+    setFilter,
+
+    // Pagination functionality
+    // Instead of using 'rows', we'll use page,
+    // which has only the rows for the active page
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+
+    // Know what's in state
+    state: {
+      // Pagination
+      pageIndex,
+      pageSize
+    },
   } = useTable(
     {
       columns,
@@ -222,6 +246,7 @@ export default function LocationTable({ locations }) {
       initialState: {
         hiddenColumns: ["scenarios"],
         sortBy: [ { id: "city" } ],
+        pageSize: 15,
       },
       defaultColumn,
       filterTypes,
@@ -230,6 +255,7 @@ export default function LocationTable({ locations }) {
     useFilters,
     useSortBy,
     useExpanded,
+    usePagination,
   );
 
   // TODO: Make this a prop of the table?
@@ -298,7 +324,7 @@ export default function LocationTable({ locations }) {
         ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-        {rows.map(row => {
+        {page.map(row => {
           prepareRow(row)
           const { key, ...restRowProps } = row.getRowProps();
           return (
@@ -327,6 +353,25 @@ export default function LocationTable({ locations }) {
           )
         })}
         </tbody>
+        <tfoot>
+        <tr>
+          <td colSpan={visibleColumns.length}>
+            <PaginationControls
+              {...{
+                canPreviousPage,
+                canNextPage,
+                pageCount,
+                pageIndex,
+                gotoPage,
+                nextPage,
+                previousPage,
+                pageSize,
+                setPageSize,
+              }}
+            />
+          </td>
+        </tr>
+        </tfoot>
       </Table>
     </div>
   );
