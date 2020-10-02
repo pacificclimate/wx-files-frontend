@@ -1,0 +1,12 @@
+.PaginationControl {
+}
+
+.perPage {
+    display: inline-block;
+    width: 4em;
+    margin: 0 0.5em;
+}
+
+.group {
+    margin: 0 0.5em;
+}
