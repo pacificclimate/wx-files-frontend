@@ -34,6 +34,7 @@ import { middleDecade } from '../../../../utils/date-and-time';
 
 import styles from './LocationTable.module.css';
 import SetFilterIcon from '../../misc/SetFilterIcon';
+import PaginationControls from '../../misc/PaginationControls';
 
 
 export default function LocationTable({ locations }) {
@@ -214,7 +215,6 @@ export default function LocationTable({ locations }) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
     visibleColumns,
 
@@ -227,7 +227,6 @@ export default function LocationTable({ locations }) {
     page,
     canPreviousPage,
     canNextPage,
-    pageOptions,
     pageCount,
     gotoPage,
     nextPage,
@@ -235,7 +234,11 @@ export default function LocationTable({ locations }) {
     setPageSize,
 
     // Know what's in state
-    state: { pageIndex, pageSize },
+    state: {
+      // Pagination
+      pageIndex,
+      pageSize
+    },
   } = useTable(
     {
       columns,
@@ -243,6 +246,7 @@ export default function LocationTable({ locations }) {
       initialState: {
         hiddenColumns: ["scenarios"],
         sortBy: [ { id: "city" } ],
+        pageSize: 15,
       },
       defaultColumn,
       filterTypes,
@@ -349,6 +353,25 @@ export default function LocationTable({ locations }) {
           )
         })}
         </tbody>
+        <tfoot>
+        <tr>
+          <td colSpan={visibleColumns.length}>
+            <PaginationControls
+              {...{
+                canPreviousPage,
+                canNextPage,
+                pageCount,
+                pageIndex,
+                gotoPage,
+                nextPage,
+                previousPage,
+                pageSize,
+                setPageSize,
+              }}
+            />
+          </td>
+        </tr>
+        </tfoot>
       </Table>
     </div>
   );
