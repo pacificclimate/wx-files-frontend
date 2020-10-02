@@ -15,27 +15,24 @@ export default function NumberRangeColumnFilter({
   return (
     <div className={`${styles.wrapper} ${styles.numberRange}`}>
       <Form.Control
-        value={filterValue[0] || ''}
+        className={styles.control}
+        size="sm"
         type="number"
+        value={filterValue[0] || ''}
         onChange={makeFilterNumberInputOnChange({ filterValue, setFilter }, 0)}
         placeholder={'Min'}
-        style={{
-          width: '70px',
-          marginRight: '0.5rem',
-        }}
-        size="sm"
       />
       to
       <Form.Control
-        value={filterValue[1] || ''}
-        type="number"
-        onChange={makeFilterNumberInputOnChange({ filterValue, setFilter }, 1)}
-        placeholder={'Max'}
+        className={styles.control}
         style={{
-          width: '70px',
-          marginLeft: '0.5rem',
+          marginLeft: '0.5em',
         }}
         size="sm"
+        type="number"
+        value={filterValue[1] || ''}
+        onChange={makeFilterNumberInputOnChange({ filterValue, setFilter }, 1)}
+        placeholder={'Max'}
       />
       <ClearButton setFilter={setFilter} />
     </div>
