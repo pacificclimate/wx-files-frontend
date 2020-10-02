@@ -221,6 +221,7 @@ export default function LocationTable({ locations }) {
       data,
       initialState: {
         hiddenColumns: ["scenarios"],
+        sortBy: [ { id: "city" } ],
       },
       defaultColumn,
       filterTypes,
