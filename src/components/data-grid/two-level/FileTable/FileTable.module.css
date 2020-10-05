@@ -15,6 +15,7 @@ using !important".
 
 .FileTable.FileTable th {
     padding: 0.25em 0.5em;
+    border-top: none;
 }
 
 .FileTable.FileTable tr:last-child th {
