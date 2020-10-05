@@ -10,14 +10,14 @@ import ClearButton from '../../data-grid/misc/ClearButton';
 export default function Help() {
   return (
     <Accordion>
-      <Card>
+      <Card border={'light'}>
         <Card.Header>
           <Accordion.Toggle
             eventKey={"0"}
             as={({ children, ...props }) => (
               <Button
                 size="sm"
-                variant="outline-info"
+                variant="outline-dark"
                 {...props}
               >
                 {children}
