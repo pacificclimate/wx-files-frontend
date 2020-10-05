@@ -30,12 +30,14 @@ export default function PaginationControls({
       <ButtonToolbar>
         <ButtonGroup className={styles.fwdBack}>
           <Button
+            title="Go to first page"
             {...buttonProps}
             onClick={() => gotoPage(0)}
           >
             <SkipBackward/>
           </Button>
           <Button
+            title="Go to previous page"
             {...buttonProps}
             disabled={!canPreviousPage}
             onClick={previousPage}
@@ -50,6 +52,7 @@ export default function PaginationControls({
             Page {pageIndex + 1} of {pageCount}
           </Button>
           <Button
+            title="Go to next page"
             {...buttonProps}
             disabled={!canNextPage}
             onClick={nextPage}
@@ -57,6 +60,7 @@ export default function PaginationControls({
             <SkipEnd/>
           </Button>
           <Button
+            title="Go to last page"
             {...buttonProps}
             onClick={() => gotoPage(pageCount - 1)}
           >
