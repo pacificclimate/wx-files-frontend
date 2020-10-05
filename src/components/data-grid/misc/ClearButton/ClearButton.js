@@ -11,7 +11,7 @@ export default function ClearButton({
   return (
     <span
       title={title}
-      className={styles.ClearButton}
+      className={`${styles.ClearButton} text-primary`}
       onClick={e => {
         e.stopPropagation();
         setFilter(undefined);
