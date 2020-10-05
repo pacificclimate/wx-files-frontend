@@ -40,5 +40,5 @@ export default function SortIndicator({
     getOr(iconsByTypeAndDir["default"], sortType),
     getOr(Circle, isSortedDesc.toString()),
   )(iconsByTypeAndDir);
-  return <Icon className={styles.SortIndicator}/>
+  return <Icon className={`${styles.SortIndicator} text-primary`}/>
 }
