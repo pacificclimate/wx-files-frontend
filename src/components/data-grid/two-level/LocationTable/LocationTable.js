@@ -295,6 +295,23 @@ export default function LocationTable({ locations }) {
         {...getTableProps()}
       >
         <thead>
+        <tr>
+          <td colSpan={visibleColumns.length}>
+            <PaginationControls
+              {...{
+                canPreviousPage,
+                canNextPage,
+                pageCount,
+                pageIndex,
+                gotoPage,
+                nextPage,
+                previousPage,
+                pageSize,
+                setPageSize,
+              }}
+            />
+          </td>
+        </tr>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
