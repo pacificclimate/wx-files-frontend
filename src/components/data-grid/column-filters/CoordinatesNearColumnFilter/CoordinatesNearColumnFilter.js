@@ -41,10 +41,11 @@ export default function CoordinatesNearColumnFilter({
         size="sm"
         htmlSize={4}
         type="number"
-        value={filterValue[2] || ''}
+        value={filterValue[2] || 10}
+        min={0}
         step={5}
         onChange={makeFilterNumberInputOnChange({ filterValue, setFilter }, 2)}
-        placeholder={`km`}
+        placeholder={`Radius (km)`}
       />
       km
       <ClearButton setFilter={setFilter} />

@@ -9,7 +9,7 @@ export default function SetFilterIcon({
   return (
     <span title={title}>
       <Upload
-        className={styles.SetFilterIcon}
+        className={`${styles.SetFilterIcon} text-primary`}
         {...restProps}
       />
     </span>

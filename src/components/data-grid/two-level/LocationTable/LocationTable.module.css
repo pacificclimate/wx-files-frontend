@@ -9,12 +9,16 @@
 .LocationTable thead th {
     padding: 0.5em;
     border-right: solid 1px gray;
-    border-bottom: solid 2px gray;
+    border-top: solid 2px gray;
+    border-bottom: none;
     font-weight: bold;
     vertical-align: text-top;
 }
 
-.LocationTable tbody td, .LocationTable tfoot td {
+.LocationTable thead td,
+.LocationTable tbody td,
+.LocationTable tfoot td
+{
     padding: 0.5em;
     border-top: 2px solid gray;
     border-right: 1px solid gray;
