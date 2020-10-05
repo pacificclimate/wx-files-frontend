@@ -60,6 +60,19 @@ export default function Help() {
                 the data in a cell by clicking on that cell. This makes it easy
                 to search for a location with similar values.
               </Note>
+              <Note title="Pagination">
+                The locations available (selected by filtering, if you use it)
+                are presented in pages of a few locations at a time.
+                Since most users want to narrow down to a small
+                number of locations using the filters and sorting, pagination
+                should be beneficial, eliminating clutter and delays in
+                presenting a long list of irrelevant results.
+                You can select how many locations constitute a page;
+                the default is 10.
+                If you wish to see other pages of filtered
+                locations, use the pagination controls at the top and bottom
+                of the locations table.
+              </Note>
               <Note title="Contextual help">
                 Most of the above help information shows as pop-ups
                 when you hover over the relevant item. For example,
