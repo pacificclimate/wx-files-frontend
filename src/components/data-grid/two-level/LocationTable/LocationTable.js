@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   useTable, useFilters, useSortBy, useExpanded, usePagination
 } from 'react-table';
@@ -13,6 +13,9 @@ import compact from 'lodash/fp/compact';
 import uniq from 'lodash/fp/uniq';
 import capitalize from 'lodash/fp/capitalize';
 import isString from 'lodash/fp/isString';
+import includes from 'lodash/fp/includes';
+import without from 'lodash/fp/without';
+import clone from 'lodash/fp/clone';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith,
@@ -35,11 +38,22 @@ import { middleDecade } from '../../../../utils/date-and-time';
 import styles from './LocationTable.module.css';
 import SetFilterIcon from '../../misc/SetFilterIcon';
 import PaginationControls from '../../misc/PaginationControls';
+import Button from 'react-bootstrap/cjs/Button';
 
 
 export default function LocationTable({ locations }) {
   // TODO: Extract the functions that are memoized to a different place.
   //  Several will be common to both tables.
+
+  // Favourites list is initialized with values from localStorage.
+  // Subsequent actions will update both state and localStorage.
+  // This should eventually be abstracted out as a hook, `useFavourites`.
+  const [favourites, setFavourites] = useState(
+    []
+    // localStorage only stores strings. FFS.
+    // JSON.parse(localStorage.getItem('favourites') || '[]')
+  );
+
   const filterTypes = React.useMemo(
     () => ({
       textStartsWith,
@@ -74,9 +88,11 @@ export default function LocationTable({ locations }) {
   const data = React.useMemo(
     () => (locations || []).map(
       location => {
-        const { latitude, longitude, files } = location;
+        const { id, latitude, longitude, files } = location;
         return ({
           ...location,
+
+          favourites,
 
           coordinates: [latitude, longitude],
 
@@ -113,24 +129,49 @@ export default function LocationTable({ locations }) {
         })
       }
     ),
-    [locations]
+    [locations, favourites]
   );
 
   const columns = React.useMemo(
     () => [
       {
+        id: "expander",
         Header: (
           <span title="Show or hide files available for a location">
             Files
           </span>
         ),
-        id: "expander",
         Cell: ({ row }) => (
           <span {...row.getToggleRowExpandedProps()}>
             <ExpandIndicator {...row} />
           </span>
         ),
         disableSortBy: true,
+      },
+      {
+        accessor: "id",
+        Header: 'Id'
+      },
+      {
+        accessor: "favourites",
+        Header: (
+          <span title="Add or remove from your favourites">
+            Favourites
+          </span>
+        ),
+        Cell: ({ row, value }) => (
+          <>
+            <Button onClick={() => {
+              const id = row.original.id;
+              const newFavourites = includes(id, value)
+                ? without([id], value)
+                : [...value, id];
+              setFavourites(newFavourites);
+            }}>
+              {includes(row.original.id, value) ? 'Remove' : 'Add' }
+            </Button>
+          </>
+        )
       },
       {
         Header: "City",
@@ -290,6 +331,18 @@ export default function LocationTable({ locations }) {
 
   return (
     <div className={styles.LocationTable}>
+      <div>
+        <Button onClick={() => {
+          const clone1 = clone(favourites);
+          clone1.push("55");
+          setFavourites(clone1)
+        }}>
+          Add item
+        </Button>
+        <pre>
+          <code>{JSON.stringify({ favourites }, null, 2)}</code>
+        </pre>
+      </div>
       <Table
         className={"rounded"}
         {...getTableProps()}
