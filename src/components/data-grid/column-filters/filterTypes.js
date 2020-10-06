@@ -1,4 +1,16 @@
 // Custom filters (functions, not UIs) for this project.
+import includes from 'lodash/fp/includes';
+
+
+// "Favourites" filter. If row is in favourites list (which is an array
+// of location id's), pass it.
+export const favourite = (rows, ids, filterValue) => {
+  return rows.filter(row => {
+    return includes(row.original.id, row.values.favourites);
+  })
+};
+favourite.autoRemove = val => !val
+
 
 export function textStartsWith(rows, id, filterValue) {
   return rows.filter(row => {
@@ -11,6 +23,7 @@ export function textStartsWith(rows, id, filterValue) {
   });
 }
 textStartsWith.autoRemove = val => !val;
+
 
 // A more forgiving 'includes' filter.
 
