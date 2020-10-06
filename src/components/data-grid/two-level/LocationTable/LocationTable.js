@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useTable, useFilters, useSortBy, useExpanded, usePagination
 } from 'react-table';
@@ -19,7 +19,7 @@ import clone from 'lodash/fp/clone';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith,
-  includesIfDefined, includesInArrayOfType, exactOrAll,
+  includesIfDefined, includesInArrayOfType, exactOrAll, favourite,
 } from '../../column-filters/filterTypes';
 import { numeric, numericArray } from '../../sortTypes';
 import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
@@ -39,20 +39,25 @@ import styles from './LocationTable.module.css';
 import SetFilterIcon from '../../misc/SetFilterIcon';
 import PaginationControls from '../../misc/PaginationControls';
 import Button from 'react-bootstrap/cjs/Button';
+import FavouriteIndicator from '../../indicators/FavouriteIndicator';
 
 
 export default function LocationTable({ locations }) {
   // TODO: Extract the functions that are memoized to a different place.
   //  Several will be common to both tables.
 
-  // Favourites list is initialized with values from localStorage.
-  // Subsequent actions will update both state and localStorage.
-  // This should eventually be abstracted out as a hook, `useFavourites`.
+  // Favourites list is initialized with values from localStorage, and
+  // localStorage is updated whenever it changes.
+  // This should eventually be abstracted out as a user hook.
+  // Note: localStorage only stores strings. FFS.
+  // TODO: `favourites` might not need to be a state value.
   const [favourites, setFavourites] = useState(
-    []
-    // localStorage only stores strings. FFS.
-    // JSON.parse(localStorage.getItem('favourites') || '[]')
+    JSON.parse(localStorage.getItem('favourites') || '[]')
   );
+
+  useEffect(() => {
+    localStorage.setItem('favourites', JSON.stringify(favourites));
+  }, [favourites]);
 
   const filterTypes = React.useMemo(
     () => ({
@@ -61,6 +66,7 @@ export default function LocationTable({ locations }) {
       coordinatesWithinRadius,
       includesIfDefined,
       includesInArrayOfType,
+      favourite,
     }),
     []
   );
@@ -72,7 +78,6 @@ export default function LocationTable({ locations }) {
     }),
     []
   );
-
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -149,29 +154,34 @@ export default function LocationTable({ locations }) {
         disableSortBy: true,
       },
       {
-        accessor: "id",
-        Header: 'Id'
-      },
-      {
         accessor: "favourites",
-        Header: (
-          <span title="Add or remove from your favourites">
-            Favourites
-          </span>
-        ),
         Cell: ({ row, value }) => (
           <>
-            <Button onClick={() => {
-              const id = row.original.id;
-              const newFavourites = includes(id, value)
-                ? without([id], value)
-                : [...value, id];
-              setFavourites(newFavourites);
-            }}>
-              {includes(row.original.id, value) ? 'Remove' : 'Add' }
-            </Button>
+            <FavouriteIndicator
+              favourite={includes(row.original.id, value)}
+              onClick={() => {
+                const id = row.original.id;
+                const newFavourites = includes(id, value)
+                  ? without([id], value)
+                  : [...value, id];
+                setFavourites(newFavourites);
+              }}
+            />
           </>
-        )
+        ),
+        Filter: ({
+          column: { filterValue, setFilter } ,
+        }) => {
+          return <FavouriteIndicator
+            title={
+              `Click to show ${filterValue ? 'all': 'only favourite'} locations`
+            }
+            favourite={filterValue}
+            onClick={() => setFilter(!filterValue)}
+          />
+        },
+        filter: 'favourite',
+        disableSortBy: true,
       },
       {
         Header: "City",
@@ -226,10 +236,16 @@ export default function LocationTable({ locations }) {
         Header: "Time Periods",
         accessor: "timePeriodDecades",
         Cell: ({ value }) => {
-          return flow(
-            map(t => `${t}s`),
-            join(', '),
-          )(value);
+          return (
+            <span style={{ whiteSpace: 'nowrap' }}>
+              {
+                flow(
+                  map(t => `${t}s`),
+                  join(', '),
+                )(value)
+              }
+            </span>
+          );
         },
         Filter: ({ column }) => (
           <SelectArrayColumnFilter
@@ -331,18 +347,6 @@ export default function LocationTable({ locations }) {
 
   return (
     <div className={styles.LocationTable}>
-      <div>
-        <Button onClick={() => {
-          const clone1 = clone(favourites);
-          clone1.push("55");
-          setFavourites(clone1)
-        }}>
-          Add item
-        </Button>
-        <pre>
-          <code>{JSON.stringify({ favourites }, null, 2)}</code>
-        </pre>
-      </div>
       <Table
         className={"rounded"}
         {...getTableProps()}
