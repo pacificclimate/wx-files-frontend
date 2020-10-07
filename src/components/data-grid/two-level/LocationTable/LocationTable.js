@@ -38,7 +38,6 @@ import { middleDecade } from '../../../../utils/date-and-time';
 import styles from './LocationTable.module.css';
 import SetFilterIcon from '../../misc/SetFilterIcon';
 import PaginationControls from '../../misc/PaginationControls';
-import Button from 'react-bootstrap/cjs/Button';
 import FavouriteIndicator from '../../indicators/FavouriteIndicator';
 import { useFavourites } from '../../../../hooks/useFavourites';
 
@@ -298,6 +297,7 @@ export default function LocationTable({ locations }) {
       defaultColumn,
       filterTypes,
       sortTypes,
+      autoResetFilters: false,
     },
     useFilters,
     useSortBy,
