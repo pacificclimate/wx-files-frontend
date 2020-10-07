@@ -40,24 +40,14 @@ import SetFilterIcon from '../../misc/SetFilterIcon';
 import PaginationControls from '../../misc/PaginationControls';
 import Button from 'react-bootstrap/cjs/Button';
 import FavouriteIndicator from '../../indicators/FavouriteIndicator';
+import { useFavourites } from '../../../../hooks/useFavourites';
 
 
 export default function LocationTable({ locations }) {
   // TODO: Extract the functions that are memoized to a different place.
   //  Several will be common to both tables.
 
-  // Favourites list is initialized with values from localStorage, and
-  // localStorage is updated whenever it changes.
-  // This should eventually be abstracted out as a user hook.
-  // Note: localStorage only stores strings. FFS.
-  // TODO: `favourites` might not need to be a state value.
-  const [favourites, setFavourites] = useState(
-    JSON.parse(localStorage.getItem('favourites') || '[]')
-  );
-
-  useEffect(() => {
-    localStorage.setItem('favourites', JSON.stringify(favourites));
-  }, [favourites]);
+  const [favourites, setFavourites] = useFavourites();
 
   const filterTypes = React.useMemo(
     () => ({
