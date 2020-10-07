@@ -15,7 +15,6 @@ import capitalize from 'lodash/fp/capitalize';
 import isString from 'lodash/fp/isString';
 import includes from 'lodash/fp/includes';
 import without from 'lodash/fp/without';
-import clone from 'lodash/fp/clone';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith,
@@ -39,14 +38,16 @@ import styles from './LocationTable.module.css';
 import SetFilterIcon from '../../misc/SetFilterIcon';
 import PaginationControls from '../../misc/PaginationControls';
 import FavouriteIndicator from '../../indicators/FavouriteIndicator';
-import { useFavourites } from '../../../../hooks/useFavourites';
+import { useLocalStorage } from '../../../../hooks/useLocalStorage';
 
 
 export default function LocationTable({ locations }) {
   // TODO: Extract the functions that are memoized to a different place.
   //  Several will be common to both tables.
 
-  const [favourites, setFavourites] = useFavourites();
+// Favourites is a list of location id's. The list is initialized with values
+// from localStorage, and localStorage is updated whenever it changes.
+  const [favourites, setFavourites] = useLocalStorage('favourites', []);
 
   const filterTypes = React.useMemo(
     () => ({
