@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useTable, useFilters, useSortBy, useExpanded, usePagination
 } from 'react-table';
@@ -13,10 +13,12 @@ import compact from 'lodash/fp/compact';
 import uniq from 'lodash/fp/uniq';
 import capitalize from 'lodash/fp/capitalize';
 import isString from 'lodash/fp/isString';
+import includes from 'lodash/fp/includes';
+import without from 'lodash/fp/without';
 
 import {
   coordinatesInBox, coordinatesWithinRadius, textStartsWith,
-  includesIfDefined, includesInArrayOfType, exactOrAll,
+  includesIfDefined, includesInArrayOfType, exactOrAll, favourite,
 } from '../../column-filters/filterTypes';
 import { numeric, numericArray } from '../../sortTypes';
 import DefaultColumnFilter from '../../column-filters/DefaultColumnFilter';
@@ -35,11 +37,18 @@ import { middleDecade } from '../../../../utils/date-and-time';
 import styles from './LocationTable.module.css';
 import SetFilterIcon from '../../misc/SetFilterIcon';
 import PaginationControls from '../../misc/PaginationControls';
+import FavouriteIndicator from '../../indicators/FavouriteIndicator';
+import { useLocalStorage } from '../../../../hooks/useLocalStorage';
 
 
 export default function LocationTable({ locations }) {
   // TODO: Extract the functions that are memoized to a different place.
   //  Several will be common to both tables.
+
+// Favourites is a list of location id's. The list is initialized with values
+// from localStorage, and localStorage is updated whenever it changes.
+  const [favourites, setFavourites] = useLocalStorage('favourites', []);
+
   const filterTypes = React.useMemo(
     () => ({
       textStartsWith,
@@ -47,6 +56,7 @@ export default function LocationTable({ locations }) {
       coordinatesWithinRadius,
       includesIfDefined,
       includesInArrayOfType,
+      favourite,
     }),
     []
   );
@@ -58,7 +68,6 @@ export default function LocationTable({ locations }) {
     }),
     []
   );
-
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -74,9 +83,11 @@ export default function LocationTable({ locations }) {
   const data = React.useMemo(
     () => (locations || []).map(
       location => {
-        const { latitude, longitude, files } = location;
+        const { id, latitude, longitude, files } = location;
         return ({
           ...location,
+
+          favourites,
 
           coordinates: [latitude, longitude],
 
@@ -113,23 +124,53 @@ export default function LocationTable({ locations }) {
         })
       }
     ),
-    [locations]
+    [locations, favourites]
   );
 
   const columns = React.useMemo(
     () => [
       {
+        id: "expander",
         Header: (
           <span title="Show or hide files available for a location">
             Files
           </span>
         ),
-        id: "expander",
         Cell: ({ row }) => (
           <span {...row.getToggleRowExpandedProps()}>
             <ExpandIndicator {...row} />
           </span>
         ),
+        disableSortBy: true,
+      },
+      {
+        accessor: "favourites",
+        Cell: ({ row, value }) => (
+          <>
+            <FavouriteIndicator
+              favourite={includes(row.original.id, value)}
+              onClick={() => {
+                const id = row.original.id;
+                const newFavourites = includes(id, value)
+                  ? without([id], value)
+                  : [...value, id];
+                setFavourites(newFavourites);
+              }}
+            />
+          </>
+        ),
+        Filter: ({
+          column: { filterValue, setFilter } ,
+        }) => {
+          return <FavouriteIndicator
+            title={
+              `Click to show ${filterValue ? 'all': 'only favourite'} locations`
+            }
+            favourite={filterValue}
+            onClick={() => setFilter(!filterValue)}
+          />
+        },
+        filter: 'favourite',
         disableSortBy: true,
       },
       {
@@ -185,10 +226,16 @@ export default function LocationTable({ locations }) {
         Header: "Time Periods",
         accessor: "timePeriodDecades",
         Cell: ({ value }) => {
-          return flow(
-            map(t => `${t}s`),
-            join(', '),
-          )(value);
+          return (
+            <span style={{ whiteSpace: 'nowrap' }}>
+              {
+                flow(
+                  map(t => `${t}s`),
+                  join(', '),
+                )(value)
+              }
+            </span>
+          );
         },
         Filter: ({ column }) => (
           <SelectArrayColumnFilter
@@ -251,6 +298,7 @@ export default function LocationTable({ locations }) {
       defaultColumn,
       filterTypes,
       sortTypes,
+      autoResetFilters: false,
     },
     useFilters,
     useSortBy,

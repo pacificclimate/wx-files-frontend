@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Notes from '../../notes/Notes';
 import Note from '../../notes/Note';
 import ClearButton from '../../data-grid/misc/ClearButton';
+import FavouriteIndicator from '../../data-grid/indicators/FavouriteIndicator';
 
 
 export default function Help() {
@@ -68,10 +69,26 @@ export default function Help() {
                 should be beneficial, eliminating clutter and delays in
                 presenting a long list of irrelevant results.
                 You can select how many locations constitute a page;
-                the default is 10.
+                the default is 15.
                 If you wish to see other pages of filtered
                 locations, use the pagination controls at the top and bottom
                 of the locations table.
+              </Note>
+              <Note title="Favourites">
+                Many users are interested in only a few locations.
+                If you wish, you can mark any location as a favourite
+                by clicking <FavouriteIndicator/> in its row.
+                That location will be stored locally in your browser as a
+                favourite, and its indicator will change
+                to <FavouriteIndicator favourite={true}/>.
+                To show only your local favourites, click
+                the <FavouriteIndicator/> in the column header.
+                To show all locations again,
+                click <FavouriteIndicator favourite={true}/> in the
+                column header.
+                Note: No one else can see or use your favourites list.
+                If you use a different computer or browser, you will have
+                a different favourites list.
               </Note>
               <Note title="Contextual help">
                 Most of the above help information shows as pop-ups
