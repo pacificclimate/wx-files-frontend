@@ -93,3 +93,17 @@ docker run --restart=unless-stopped -d \
 
 This project was initialized using `create-react-app`.
 For details see [Project initialization](docs/Project-initialization.md).
+
+### Releasing a new version
+
+1. Increment `version` in `package.json`.
+2. Summarize the changes from the last version in `NEWS.md`.
+3. Commit these changes, then tag the release, and push all to GitHub,
+   including tag:
+
+   ```bash
+   git add package.json NEWS.md
+   git commit -m "Bump to version x.x.x"
+   git tag -a -m "x.x.x" x.x.x
+   git push --follow-tags
+   ```
