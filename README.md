@@ -42,7 +42,7 @@ is built (see below).
 value when the image is run.
 * No default value for this variable is provided in any `.env` file.
 
-`REACT_APP_WX_FILES_SERVICE_URL`
+`REACT_APP_WXFS_URL`
 * URL of Wx Files metadata/data service.
 
 `NODE_ENV`
