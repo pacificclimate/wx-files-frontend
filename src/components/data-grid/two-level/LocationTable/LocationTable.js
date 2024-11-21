@@ -104,6 +104,12 @@ export default function LocationTable({ locations }) {
             uniq,
           )(files),
 
+		  versions: flow(
+			map('version'),
+			compact,
+			uniq,
+		  )(files),
+
           filesData: map(
             file => {
               const {
@@ -247,6 +253,31 @@ export default function LocationTable({ locations }) {
         filter: includesInArrayOfType(Number, "*"),
         disableSortBy: true,
       },
+	  {
+	    Header: "Versions",
+	    accessor: "versions",
+	    Cell: ({ value }) => {
+	      return (
+	        <span style={{ whiteSpace: 'nowrap' }}>
+	          {
+	            flow(
+	              map(t => `${t}`),
+	              join(', '),
+	            )(value)
+	          }
+	        </span>
+	      );
+	    },
+	    Filter: ({ column }) => (
+	      <SelectArrayColumnFilter
+	        toString={option => `${option}`}
+	        column={column}
+	        allValue={"*"}
+	      />
+	    ),
+	    filter: includesInArrayOfType(String, "*"),
+	    disableSortBy: true,
+	  },
       {
         Header: "Scenarios",
         accessor: "scenarios",
