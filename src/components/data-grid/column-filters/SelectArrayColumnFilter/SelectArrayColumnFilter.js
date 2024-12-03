@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Form from 'react-bootstrap/Form';
 import ClearButton from '../../misc/ClearButton';
 import styles from '../ColumnFilters.module.css';
+import {useStore} from '../../../../hooks/useZustandStore';
 
 // Custom filter UI for selecting a unique option from a list that contains
 // an array of option values. (Typically this array coalesces information about
@@ -12,6 +13,8 @@ export default function SelectArrayColumnFilter({
   toString = option => option.toString(),
   allValue = "*",
 }) {
+  const registerFilter = useStore.getState().registerFilter;
+
   // Calculate the options for filtering using the preFilteredRows.
   // The row values themselves are arrays, and each array element is added
   // to the list of options.
@@ -24,6 +27,12 @@ export default function SelectArrayColumnFilter({
     });
     return [...options.values()];
   }, [id, preFilteredRows])
+
+  // register this filter so it can be used by other UI elements
+  // only needs to be done once.
+  useEffect(() => {
+	  registerFilter(id, "list", setFilter, options? options : {});
+  }, [options]);
 
   // Render a multi-select box
   return (

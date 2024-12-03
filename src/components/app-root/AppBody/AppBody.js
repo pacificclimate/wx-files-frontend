@@ -6,7 +6,7 @@ import { fetchWxFilesMetadata }
   from '../../../data-services/wx-files-data-service';
 import Help from '../../guidance/Help';
 import LocationTable from '../../data-grid/two-level/LocationTable';
-
+import FilterListDropdown from '../../controls/FilterListDropdown/FilterListDropdown';
 
 export default function AppBody() {
   const [locations, setLocations] = useState(null);
@@ -14,7 +14,7 @@ export default function AppBody() {
   useEffect(() => {
     fetchWxFilesMetadata().then(setLocations);
   }, []);
-
+ 
   return (
     <>
       <Row>
@@ -22,6 +22,11 @@ export default function AppBody() {
           <Help/>
         </Col>
       </Row>
+	  <Row>
+	    <Col lg={12}>
+		  <FilterListDropdown filter_id={"versions"} initialize={"CMIP6"} label={"Future-shifted Dataset"} />
+		</Col>
+	  </Row>
       <Row>
         <Col lg={12}>
           <LocationTable locations={locations}/>
