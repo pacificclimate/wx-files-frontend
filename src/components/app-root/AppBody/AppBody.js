@@ -16,16 +16,19 @@ export default function AppBody() {
   const [filteredLocations, setFilteredLocations] = useState(null);
 
   const filterLocations = (ver) => {
-	setFilteredLocations(
-		filter((location) => {
-			return some(["version", ver])(location["files"]);
-		})(locations)
-	);
+	// don't respond to dropdown selections until locations are loaded
+	if (locations) {
+    	setFilteredLocations(
+	    	filter((location) => {
+		    	return some(["version", ver])(location.files);
+		  })(locations)
+	  );
+	}
   };
 
-  const selectVersion = (option) => {
-	setVersion(option["value"]);
-	filterLocations(option["value"]);
+  const selectVersion = (ver) => {
+	setVersion(ver);
+	filterLocations(ver);
   };
 
   //fetch locations
@@ -48,10 +51,9 @@ export default function AppBody() {
         </Col>
       </Row>
 	  <Row>
-	    <VersionControl
-		  selected={version}
-		  onSelect={selectVersion}
-		/>
+	    <Col lg={3}>
+    	    <VersionControl selected={version} onSelect={selectVersion} label={"Future-shifted Dataset"}/>
+		</Col>
 	  </Row>
       <Row>
         <Col lg={12}>

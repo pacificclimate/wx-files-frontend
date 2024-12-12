@@ -4,28 +4,29 @@
 import React from 'react';
 import Select from 'react-select';
 
-export default function VersionControl( { onSelect, selected } ) {
+export default function VersionControl( { onSelect, selected, label } ) {
 	// this is all just hard-coded, it's complocated to
 	// get it from the API.
 	const items = [
-		{"value": "CMIP6", "label": "CMIP6+CWEC2020"},
-		{"value": "CMIP5", "label": "CMIP5+CWEC2016"}
+		{"value": "CMIP6", "label": "CMIP6 + CWEC2020"},
+		{"value": "CMIP5", "label": "CMIP5 + CWEC2016"}
 	];
 	
-	const label = "Future-shifted Dataset";
-	
 	const value = () => {
-		return items.find((o) => o["value"] === selected)
+		return items.find((o) => o.value === selected)
 	};
+	
+	const handleSelect = (option) => {
+		onSelect(option.value);
+	}
 	
 	return (
 		<div>
-		{label}
+		<strong>{label}</strong>
 		<Select
-		  isLoading={items.length === 0}
 		  options={items}
 		  value={value()}
-		  onChange={onSelect}
+		  onChange={handleSelect}
 		/>
 		</div>
 	);
