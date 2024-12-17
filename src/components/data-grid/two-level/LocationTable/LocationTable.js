@@ -232,7 +232,7 @@ export default function LocationTable({ locations }) {
                 flow(
                   map(t => `${t}s`),
                   join(', '),
-                )(value)
+                )(value.sort())
               }
             </span>
           );

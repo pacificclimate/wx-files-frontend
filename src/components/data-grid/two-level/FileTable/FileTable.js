@@ -72,7 +72,13 @@ export default function FileTable({ data }) {
     rows,
     prepareRow,
   } = useTable(
-    { columns, data, defaultColumn, filterTypes, },
+    { 
+		columns, 
+		data, 
+		initialState: {sortBy:  [{id: "scenario"}, {id: "timePeriodDecade"}]},
+		defaultColumn, 
+		filterTypes, 
+	},
     useFilters,
     useSortBy,
   );
