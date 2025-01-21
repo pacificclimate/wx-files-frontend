@@ -1,0 +1,22 @@
+# This docker-compose uses the following shell environment variables:
+#
+# `APP_TAG`: Image tag
+# `APP_PORT`: External port to map to
+#
+# Their values are set appropriately in the Makefile for use on a workstation.
+# For use in a production setting, either set the shell
+# variables appropriately when invoking docker-compose, or modify (a copy of)
+# this file with the desired values.
+
+version: "3.8"
+services:
+  wx-files-frontend:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    image: pcic/wx-files-frontend:${APP_TAG}
+    container_name: wx-files-frontend
+    ports:
+      - "${APP_PORT}:8080"
+    volumes:
+      - ./config.js:/app/config.js
