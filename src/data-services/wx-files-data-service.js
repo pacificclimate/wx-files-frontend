@@ -28,14 +28,13 @@ export const normalizeLocationsData =
 
 export function fetchWxFilesMetadata() {
   return axios.get(
-    urljoin(process.env.REACT_APP_WXFS_URL, 'locations')
+    urljoin(window.env.REACT_APP_WXFS_URL, 'locations')
   )
     .then(response => response.data)
-    .then(normalizeLocationsData)
-    ;
+    .then(normalizeLocationsData);
 }
 
 
 export function fileContentUri(endpoint) {
-  return urljoin(process.env.REACT_APP_WXFS_URL, endpoint)
+  return urljoin(window.env.REACT_APP_WXFS_URL, endpoint)
 }

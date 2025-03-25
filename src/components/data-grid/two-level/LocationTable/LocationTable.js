@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   useTable, useFilters, useSortBy, useExpanded, usePagination
 } from 'react-table';
@@ -83,7 +83,7 @@ export default function LocationTable({ locations }) {
   const data = React.useMemo(
     () => (locations || []).map(
       location => {
-        const { id, latitude, longitude, files } = location;
+        const { latitude, longitude, files } = location;
         return ({
           ...location,
 
@@ -253,8 +253,9 @@ export default function LocationTable({ locations }) {
         Cell: ({ value }) => value.join(', '),
         filter: "text",
       },
-    ],
-    []
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ],[]
   );
 
   const {

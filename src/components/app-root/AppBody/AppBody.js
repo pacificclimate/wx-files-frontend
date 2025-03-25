@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import filter from 'lodash/fp/filter';
@@ -15,49 +15,40 @@ export default function AppBody() {
   const [version, setVersion] = useState("CMIP6");
   const [filteredLocations, setFilteredLocations] = useState(null);
 
-  const filterLocations = (ver) => {
-	// don't respond to dropdown selections until locations are loaded
-	if (locations) {
-    	setFilteredLocations(
-	    	filter((location) => {
-		    	return some(["version", ver])(location.files);
-		  })(locations)
-	  );
-	}
-  };
-
-  const selectVersion = (ver) => {
-	setVersion(ver);
-	filterLocations(ver);
-  };
-
   //fetch locations
   useEffect(() => {
     fetchWxFilesMetadata().then(setLocations);
   }, []);
 
-  // set initial filtered locations
-  useEffect(() => {
-	if(locations && !filteredLocations){
-		filterLocations(version);
-	}
-  }, [locations]);
+  useMemo(() => {
+    if (locations) {
+      setFilteredLocations(
+        filter((location) => {
+          return some(["version", version])(location.files);
+        })(locations)
+      );
+    }
+  }, [locations, version]);
+
+  const selectVersion = (ver) => {
+    setVersion(ver);
+  };
 
   return (
     <>
       <Row>
         <Col lg={12}>
-          <Help/>
+          <Help />
         </Col>
       </Row>
-	  <Row>
-	    <Col lg={3}>
-    	    <VersionControl selected={version} onSelect={selectVersion} label={"Future-shifted Dataset"}/>
-		</Col>
-	  </Row>
+      <Row>
+        <Col lg={3}>
+          <VersionControl selected={version} onSelect={selectVersion} label={"Future-shifted Dataset"} />
+        </Col>
+      </Row>
       <Row>
         <Col lg={12}>
-          <LocationTable locations={filteredLocations}/>
+          <LocationTable locations={filteredLocations} />
         </Col>
       </Row>
     </>

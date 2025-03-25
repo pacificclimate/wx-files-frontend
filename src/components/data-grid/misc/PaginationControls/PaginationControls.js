@@ -4,7 +4,6 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
 import {
-  InputCursor,
   SkipBackward, SkipEnd, SkipForward, SkipStart
 } from 'react-bootstrap-icons';
 import Form from 'react-bootstrap/Form';
