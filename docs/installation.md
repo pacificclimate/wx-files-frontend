@@ -4,19 +4,19 @@
 
 Your Node.js tooling must satisfy the following version requirements:
 
-- `npm` >= 8.1.0 (10+ Reccomended)
-- `node` >= 16 (22+ Reccomended)
+- Node 24.x
+- npm 12.x
 
 ## Install
 
 With the appropriate versions of `node`/`npm` in use:
 
 ```bash
-npm install
+npm ci
 ```
 
 If you need to start fresh after much messing about, the `reinstall` script
-deletes `./node_modules/` and then installs:
+performs a clean lockfile install:
 
 ```bash
 npm run reinstall

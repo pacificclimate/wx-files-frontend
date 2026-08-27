@@ -22,6 +22,7 @@
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
+    "reinstall": "npm ci",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -45,5 +46,13 @@
     "@testing-library/user-event": "^7.2.1",
     "jest-each": "^26.4.2",
     "prettier": "3.4.2"
+  },
+  "engines": {
+    "node": "24.x",
+    "npm": "12.x"
+  },
+  "allowScripts": {
+    "core-js@2.6.11 || 3.6.5": true,
+    "core-js-pure@3.6.5": true
   }
 }
