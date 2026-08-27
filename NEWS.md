@@ -1,4 +1,8 @@
 # News / Release Notes
+## 1.3.0
+
+*2026-Aug-27*
+- [Node 24 npm 12 security policy #76](https://github.com/pacificclimate/wx-files-frontend/pull/76)
 
 ## 1.2.0
 
